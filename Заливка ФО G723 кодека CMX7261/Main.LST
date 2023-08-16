@@ -1,4 +1,4 @@
-A51 MACRO ASSEMBLER  MAIN                                                                 08/16/2023 13:30:06 PAGE     1
+A51 MACRO ASSEMBLER  MAIN                                                                 08/16/2023 14:02:36 PAGE     1
 
 
 MACRO ASSEMBLER A51 V8.02b
@@ -65,7 +65,7 @@ LOC  OBJ            LINE     SOURCE
   0098          +1    56     SCON0          DATA 098H    ; UART 0 CONTROL
   0098          +1    57     SCON1          DATA 098H    ; UART 1 CONTROL
   0099          +1    58     SBUF0          DATA 099H    ; UART 0 DATA BUFFER
-A51 MACRO ASSEMBLER  MAIN                                                                 08/16/2023 13:30:06 PAGE     2
+A51 MACRO ASSEMBLER  MAIN                                                                 08/16/2023 14:02:36 PAGE     2
 
   0099          +1    59     SBUF1          DATA 099H    ; UART 1 DATA BUFFER
   009A          +1    60     SPI0CFG        DATA 09AH    ; SPI CONFIGURATION
@@ -133,7 +133,7 @@ LOC  OBJ            LINE     SOURCE
   00CB          +1   122     RCAP3H         DATA 0CBH    ; TIMER 3 CAPTURE/RELOAD HIGH BYTE
   00CB          +1   123     RCAP4H         DATA 0CBH    ; TIMER/COUNTER 4 CAPTURE/RELOAD HIGH BYTE
   00CC          +1   124     TMR2L          DATA 0CCH    ; TIMER/COUNTER 2 LOW BYTE
-A51 MACRO ASSEMBLER  MAIN                                                                 08/16/2023 13:30:06 PAGE     3
+A51 MACRO ASSEMBLER  MAIN                                                                 08/16/2023 14:02:36 PAGE     3
 
   00CC          +1   125     TMR3L          DATA 0CCH    ; TIMER 3 LOW BYTE
   00CC          +1   126     TMR4L          DATA 0CCH    ; TIMER/COUNTER 4 LOW BYTE
@@ -201,7 +201,7 @@ LOC  OBJ            LINE     SOURCE
   008D          +1   188     TF0            BIT 08DH     ; TIMER 0 OVERFLOW FLAG
   008C          +1   189     TR0            BIT 08CH     ; TIMER 0 ON/OFF CONTROL
   008B          +1   190     IE1            BIT 08BH     ; EXT. INTERRUPT 1 EDGE FLAG
-A51 MACRO ASSEMBLER  MAIN                                                                 08/16/2023 13:30:06 PAGE     4
+A51 MACRO ASSEMBLER  MAIN                                                                 08/16/2023 14:02:36 PAGE     4
 
   008A          +1   191     IT1            BIT 08AH     ; EXT. INTERRUPT 1 TYPE
   0089          +1   192     IE0            BIT 089H     ; EXT. INTERRUPT 0 EDGE FLAG
@@ -269,7 +269,7 @@ LOC  OBJ            LINE     SOURCE
                 +1   254     ; SMB0CN 0C0H
   00C7          +1   255     BUSY           BIT 0C7H     ; SMBUS 0 BUSY
   00C6          +1   256     ENSMB          BIT 0C6H     ; SMBUS 0 ENABLE
-A51 MACRO ASSEMBLER  MAIN                                                                 08/16/2023 13:30:06 PAGE     5
+A51 MACRO ASSEMBLER  MAIN                                                                 08/16/2023 14:02:36 PAGE     5
 
   00C5          +1   257     STA            BIT 0C5H     ; SMBUS 0 START FLAG
   00C4          +1   258     STO            BIT 0C4H     ; SMBUS 0 STOP FLAG
@@ -337,7 +337,7 @@ LOC  OBJ            LINE     SOURCE
   00EA          +1   320     AD0CM0         BIT 0EAH     ; ADC 0 CONVERT START MODE BIT 0
   00E9          +1   321     AD0WINT        BIT 0E9H     ; ADC 0 WINDOW INTERRUPT FLAG
   00E8          +1   322     AD0LJST        BIT 0E8H     ; ADC 0 LEFT JUSTIFY DATA BIT
-A51 MACRO ASSEMBLER  MAIN                                                                 08/16/2023 13:30:06 PAGE     6
+A51 MACRO ASSEMBLER  MAIN                                                                 08/16/2023 14:02:36 PAGE     6
 
                 +1   323     
                 +1   324     ; ADC2CN 0E8H
@@ -405,7 +405,7 @@ LOC  OBJ            LINE     SOURCE
                      383             
 0014 759D04          384             MOV             SPI0CKR,        #4 ; Эту частоту ДВ на рандом поставил. 
 0017 759A40          385             MOV             SPI0CFG,        #01000000b      ; включаем ведущий режим
-A51 MACRO ASSEMBLER  MAIN                                                                 08/16/2023 13:30:06 PAGE     7
+A51 MACRO ASSEMBLER  MAIN                                                                 08/16/2023 14:02:36 PAGE     7
 
 001A 75F801          386             MOV             SPI0CN,         #00000001b      ; включаем модуль SPI0
                      387             
@@ -426,9 +426,9 @@ LOC  OBJ            LINE     SOURCE
                      402     ;1. Реализуем сброс кодека. Для того на пине RESETN установим 0, подождем немного, а потом 
                              установим 1.
 0037 C2A1            403             CLR             PIN_RESETN
-0039 1156            404             ACALL   Wait_long
+0039 1165            404             ACALL   Wait_long
 003B D2A1            405             SETB    PIN_RESETN      
-003D 1156            406             ACALL   Wait_long               ;Как оказалось, кодеку туть нужно время на подумать
+003D 1165            406             ACALL   Wait_long               ;Как оказалось, кодеку туть нужно время на подумать
                              .
                      407             
 003F                 408     Loop:
@@ -436,82 +436,99 @@ LOC  OBJ            LINE     SOURCE
                      410     ;2. Прочитаем содержимое регистра $4F, для того организуем поточную транзацию с импользован
                              ием SPI.
 003F                 411     Wait_for_3_control_words:
-                     412     
-003F C284            413             CLR             PIN_CSN
-0041 1151            414             ACALL   Wait_short
-                     415             
-0043 744F            416             MOV             A,              #0x4F   ;Передаем в подрограмму адрес регистра коде
+003F C284            412             CLR             PIN_CSN
+0041 1160            413             ACALL   Wait_short
+                     414             
+0043 744F            415             MOV             A,              #0x4F   ;Передаем в подрограмму адрес регистра коде
                              ка, который хотим прочитать.
-0045 115F            417             ACALL   SPI0                    
-                     418     
-0047 E4              419             CLR             A
-0048 115F            420             ACALL   SPI0                    ;На втором байте считываем сами данные.
+0045 116E            416             ACALL   SPI0                    
+                     417     
+0047 116E            418             ACALL   SPI0                    ;На втором байте считываем сами данные.
+                     419             
+0049 D284            420             SETB            PIN_CSN
                      421             
-004A D284            422             SETB            PIN_CSN
-                     423             
-004C B403F0          424             CJNE    A,              #0x03,          Wait_for_3_control_words        ;Сравнение 
+004B B403F1          422             CJNE    A,              #0x03,          Wait_for_3_control_words        ;Сравнение 
                              аккумулятора с константой и переход, если не равно.
-                     425     
-                     426             
-004F 80EE            427     SJMP    Loop
-                     428     
-                     429     ;$include (My_library.inc)
-  0080          +1   430     PIN_SCLK                EQU             P0.0    ;SCK
-  0081          +1   431     PIN_RDATA               EQU             P0.1    ;MISO
-  0082          +1   432     PIN_CDATA               EQU             P0.2    ;MOSI
-  0084          +1   433     PIN_CSN                 EQU             P0.4    ;Вот тут вопрос. Эту лапку будем менять про
-                             граммно.
-  00A1          +1   434     PIN_RESETN              EQU             P2.1
-                +1   435             
-                +1   436             
-                +1   437     ;Задержки для SPI.
-0051            +1   438     Wait_short:
-0051            +1   439             Wait_sh:
-0051 D8FE       +1   440                     DJNZ    R0,                     Wait_sh
-0053 7864       +1   441             MOV             R0,                     #100
-0055 22         +1   442     RET
-                +1   443     
-0056            +1   444     Wait_long:
-0056 7800       +1   445             MOV             R0,             #0
-A51 MACRO ASSEMBLER  MAIN                                                                 08/16/2023 13:30:06 PAGE     8
+                     423     
+                     424     
+                     425     ;3. Считаем из регистра $4D 6 байт. По идее, мы с ними ничего делать не должны.
+004E C284            426             CLR             PIN_CSN
+0050 1160            427             ACALL   Wait_short
+                     428             
+0052 744D            429             MOV             A,              #0x4D   
+0054 116E            430             ACALL   SPI0                    
+                     431             
+0056                 432             Read_6_bytes:
+0056 116E            433                     ACALL   SPI0                    
+0058 DAFC            434                     DJNZ    R2,             Read_6_bytes
+005A 7A06            435             MOV             R2,             #6
+                     436                     
+005C D284            437             SETB            PIN_CSN
+                     438             
+                     439             
+                     440             
+                     441             
+                     442             
+                     443             
+005E 80DF            444     SJMP    Loop
+                     445     
+                     446     ;$include (My_library.inc)
+A51 MACRO ASSEMBLER  MAIN                                                                 08/16/2023 14:02:36 PAGE     8
 
-0058 7900       +1   446             MOV             R1,             #0
-                +1   447             
-005A            +1   448             Wait_ln:
-005A D8FE       +1   449                     DJNZ    R0,             Wait_ln
-005C D9FC       +1   450                     DJNZ    R1,             Wait_ln
-005E 22         +1   451     RET
-                +1   452     
-                +1   453     
-                +1   454     ;Непосредственно сам SPI. Возможно, требует доработок.
-005F            +1   455     SPI0:
-005F F59B       +1   456             MOV             SPI0DAT,        A
-                +1   457     
-0061            +1   458     poll_SPIF:
-0061 30FFFD     +1   459             JNB             SPIF,           poll_SPIF       ;Ждем, пока  SPI сообщит о том, что
+  0080          +1   447     PIN_SCLK                EQU             P0.0    ;SCK
+  0081          +1   448     PIN_RDATA               EQU             P0.1    ;MISO
+  0082          +1   449     PIN_CDATA               EQU             P0.2    ;MOSI
+  0084          +1   450     PIN_CSN                 EQU             P0.4    ;Вот тут вопрос. Эту лапку будем менять про
+                             граммно.
+  00A1          +1   451     PIN_RESETN              EQU             P2.1
+                +1   452             
+                +1   453             
+                +1   454     ;Задержки для SPI.
+0060            +1   455     Wait_short:
+0060            +1   456             Wait_sh:
+0060 D8FE       +1   457                     DJNZ    R0,                     Wait_sh
+0062 7864       +1   458             MOV             R0,                     #100
+0064 22         +1   459     RET
+                +1   460     
+0065            +1   461     Wait_long:
+0065 7800       +1   462             MOV             R0,             #0
+0067 7900       +1   463             MOV             R1,             #0
+                +1   464             
+0069            +1   465             Wait_ln:
+0069 D8FE       +1   466                     DJNZ    R0,             Wait_ln
+006B D9FC       +1   467                     DJNZ    R1,             Wait_ln
+006D 22         +1   468     RET
+                +1   469     
+                +1   470     
+                +1   471     ;Непосредственно сам SPI. Возможно, требует доработок.
+006E            +1   472     SPI0:
+006E F59B       +1   473             MOV             SPI0DAT,        A
+                +1   474     
+0070            +1   475     poll_SPIF:
+0070 30FFFD     +1   476             JNB             SPIF,           poll_SPIF       ;Ждем, пока  SPI сообщит о том, что
                               все данные переданы.
-0064 C2FF       +1   460             CLR             SPIF
-                +1   461     
-0066 E59B       +1   462             MOV             A,                      SPI0DAT
-0068 1151       +1   463             ACALL   Wait_short
-006A 22         +1   464     RET
-                +1   465     
-                +1   466     
-                +1   467     ;Выбор кристалла.
-                +1   468     ;Down_the_crystal_selection:
-                +1   469     ;       CLR             PIN_CSN
-                +1   470     ;       ACALL   Wait_short              ;Согласно документации, тут должна быть задержка не
+0073 C2FF       +1   477             CLR             SPIF
+                +1   478     
+0075 E59B       +1   479             MOV             A,                      SPI0DAT
+0077 1160       +1   480             ACALL   Wait_short
+0079 22         +1   481     RET
+                +1   482     
+                +1   483     
+                +1   484     ;Выбор кристалла.
+                +1   485     ;Down_the_crystal_selection:
+                +1   486     ;       CLR             PIN_CSN
+                +1   487     ;       ACALL   Wait_short              ;Согласно документации, тут должна быть задержка не
                               менее 100 нс.
-                +1   471             
-                +1   472     ;Up_the_crystal_selection:
-                +1   473     ;       SETB    PIN_CSN
-                +1   474             ;может быть, сюда нужно будет добавить задержку.
-                +1   475     
-                +1   476     
-                     477     
-                     478             
-                     479     END
-A51 MACRO ASSEMBLER  MAIN                                                                 08/16/2023 13:30:06 PAGE     9
+                +1   488             
+                +1   489     ;Up_the_crystal_selection:
+                +1   490     ;       SETB    PIN_CSN
+                +1   491             ;может быть, сюда нужно будет добавить задержку.
+                +1   492     
+                +1   493     
+                     494     
+                     495             
+                     496     END
+A51 MACRO ASSEMBLER  MAIN                                                                 08/16/2023 14:02:36 PAGE     9
 
 SYMBOL TABLE LISTING
 ------ ----- -------
@@ -579,7 +596,7 @@ CP0HYN0. . . . . . . . .  B ADDR   0088H.0 A
 CP0HYN1. . . . . . . . .  B ADDR   0088H.1 A   
 CP0HYP0. . . . . . . . .  B ADDR   0088H.2 A   
 CP0HYP1. . . . . . . . .  B ADDR   0088H.3 A   
-A51 MACRO ASSEMBLER  MAIN                                                                 08/16/2023 13:30:06 PAGE    10
+A51 MACRO ASSEMBLER  MAIN                                                                 08/16/2023 14:02:36 PAGE    10
 
 CP0OUT . . . . . . . . .  B ADDR   0088H.6 A   
 CP0RIF . . . . . . . . .  B ADDR   0088H.5 A   
@@ -647,7 +664,7 @@ IE . . . . . . . . . . .  D ADDR   00A8H   A
 IE0. . . . . . . . . . .  B ADDR   0088H.1 A   
 IE1. . . . . . . . . . .  B ADDR   0088H.3 A   
 IP . . . . . . . . . . .  D ADDR   00B8H   A   
-A51 MACRO ASSEMBLER  MAIN                                                                 08/16/2023 13:30:06 PAGE    11
+A51 MACRO ASSEMBLER  MAIN                                                                 08/16/2023 14:02:36 PAGE    11
 
 IT0. . . . . . . . . . .  B ADDR   0088H.0 A   
 IT1. . . . . . . . . . .  B ADDR   0088H.2 A   
@@ -715,7 +732,7 @@ PCA0CPM1 . . . . . . . .  D ADDR   00DBH   A
 PCA0CPM2 . . . . . . . .  D ADDR   00DCH   A   
 PCA0CPM3 . . . . . . . .  D ADDR   00DDH   A   
 PCA0CPM4 . . . . . . . .  D ADDR   00DEH   A   
-A51 MACRO ASSEMBLER  MAIN                                                                 08/16/2023 13:30:06 PAGE    12
+A51 MACRO ASSEMBLER  MAIN                                                                 08/16/2023 14:02:36 PAGE    12
 
 PCA0CPM5 . . . . . . . .  D ADDR   00DFH   A   
 PCA0H. . . . . . . . . .  D ADDR   00FAH   A   
@@ -733,7 +750,7 @@ PLL0DIV. . . . . . . . .  D ADDR   008DH   A
 PLL0FLT. . . . . . . . .  D ADDR   008FH   A   
 PLL0MUL. . . . . . . . .  D ADDR   008EH   A   
 PLL0_PAGE. . . . . . . .  N NUMB   000FH   A   
-POLL_SPIF. . . . . . . .  C ADDR   0061H   A   
+POLL_SPIF. . . . . . . .  C ADDR   0070H   A   
 PS . . . . . . . . . . .  B ADDR   00B8H.4 A   
 PSBANK . . . . . . . . .  D ADDR   00B1H   A   
 PSCTL. . . . . . . . . .  D ADDR   008FH   A   
@@ -751,6 +768,7 @@ RCAP3H . . . . . . . . .  D ADDR   00CBH   A
 RCAP3L . . . . . . . . .  D ADDR   00CAH   A   
 RCAP4H . . . . . . . . .  D ADDR   00CBH   A   
 RCAP4L . . . . . . . . .  D ADDR   00CAH   A   
+READ_6_BYTES . . . . . .  C ADDR   0056H   A   
 REF0CN . . . . . . . . .  D ADDR   00D1H   A   
 REN0 . . . . . . . . . .  B ADDR   0098H.4 A   
 REN1 . . . . . . . . . .  B ADDR   0098H.4 A   
@@ -782,11 +800,11 @@ SMB0DAT. . . . . . . . .  D ADDR   00C2H   A
 SMB0STA. . . . . . . . .  D ADDR   00C1H   A   
 SMB0_PAGE. . . . . . . .  N NUMB   0000H   A   
 SMBFTE . . . . . . . . .  B ADDR   00C0H.1 A   
-SMBTOE . . . . . . . . .  B ADDR   00C0H.0 A   
-A51 MACRO ASSEMBLER  MAIN                                                                 08/16/2023 13:30:06 PAGE    13
+A51 MACRO ASSEMBLER  MAIN                                                                 08/16/2023 14:02:36 PAGE    13
 
+SMBTOE . . . . . . . . .  B ADDR   00C0H.0 A   
 SP . . . . . . . . . . .  D ADDR   0081H   A   
-SPI0 . . . . . . . . . .  C ADDR   005FH   A   
+SPI0 . . . . . . . . . .  C ADDR   006EH   A   
 SPI0CFG. . . . . . . . .  D ADDR   009AH   A   
 SPI0CKR. . . . . . . . .  D ADDR   009DH   A   
 SPI0CN . . . . . . . . .  D ADDR   00F8H   A   
@@ -837,10 +855,10 @@ TXBMT. . . . . . . . . .  B ADDR   00F8H.1 A
 UART0_PAGE . . . . . . .  N NUMB   0000H   A   
 UART1_PAGE . . . . . . .  N NUMB   0001H   A   
 WAIT_FOR_3_CONTROL_WORDS  C ADDR   003FH   A   
-WAIT_LN. . . . . . . . .  C ADDR   005AH   A   
-WAIT_LONG. . . . . . . .  C ADDR   0056H   A   
-WAIT_SH. . . . . . . . .  C ADDR   0051H   A   
-WAIT_SHORT . . . . . . .  C ADDR   0051H   A   
+WAIT_LN. . . . . . . . .  C ADDR   0069H   A   
+WAIT_LONG. . . . . . . .  C ADDR   0065H   A   
+WAIT_SH. . . . . . . . .  C ADDR   0060H   A   
+WAIT_SHORT . . . . . . .  C ADDR   0060H   A   
 WCOL . . . . . . . . . .  B ADDR   00F8H.6 A   
 WDTCN. . . . . . . . . .  D ADDR   00FFH   A   
 XBR0 . . . . . . . . . .  D ADDR   00E1H   A   
@@ -852,5 +870,3 @@ REGISTER BANK(S) USED: 0
 
 
 ASSEMBLY COMPLETE.  0 WARNING(S), 0 ERROR(S)
-A51 MACRO ASSEMBLER  MAIN                                                                 08/16/2023 13:30:06 PAGE    14
-

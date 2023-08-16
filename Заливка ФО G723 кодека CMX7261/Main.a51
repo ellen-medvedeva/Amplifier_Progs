@@ -42,20 +42,37 @@ Loop:
 
 ;2. Прочитаем содержимое регистра $4F, для этого организуем поточную транзацию с импользованием SPI.
 Wait_for_3_control_words:
-
 	CLR		PIN_CSN
 	ACALL	Wait_short
 	
 	MOV		A,		#0x4F	;Передаем в подрограмму адрес регистра кодека, который хотим прочитать.
 	ACALL	SPI0			
 
-	CLR		A
 	ACALL	SPI0			;На втором байте считываем сами данные.
 	
 	SETB		PIN_CSN
 	
 	CJNE	A,		#0x03,		Wait_for_3_control_words	;Сравнение аккумулятора с константой и переход, если не равно.
 
+
+;3. Считаем из регистра $4D 6 байт. По идее, мы с ними ничего делать не должны.
+	CLR		PIN_CSN
+	ACALL	Wait_short
+	
+	MOV		A,		#0x4D	
+	ACALL	SPI0			
+	
+	Read_6_bytes:
+		ACALL	SPI0			
+		DJNZ 	R2,		Read_6_bytes
+	MOV		R2,		#6
+		
+	SETB		PIN_CSN
+	
+	
+	
+	
+	
 	
 SJMP	Loop
 
