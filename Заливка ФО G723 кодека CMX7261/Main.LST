@@ -1,4 +1,4 @@
-A51 MACRO ASSEMBLER  MAIN                                                                 08/17/2023 19:46:33 PAGE     1
+A51 MACRO ASSEMBLER  MAIN                                                                 08/17/2023 22:45:19 PAGE     1
 
 
 MACRO ASSEMBLER A51 V8.02b
@@ -7,7 +7,7 @@ ASSEMBLER INVOKED BY: D:\Keil_v5\C51\BIN\A51.EXE Main.a51 NOMOD51 SET(SMALL) DEB
 
 LOC  OBJ            LINE     SOURCE
 
-0000                   1     Start:
+0000                   1     Start_program:
                        2     ;$include (c8051F120.inc)
                 +1     3     ;---------------------------------------------------------------------------
                 +1     4     ; Copyright (C) 2003 CYGNAL INTEGRATED PRODUCTS, INC.
@@ -65,7 +65,7 @@ LOC  OBJ            LINE     SOURCE
   0097          +1    56     CLKSEL         DATA 097H    ; SYSTEM CLOCK SELECT
   0098          +1    57     SCON0          DATA 098H    ; UART 0 CONTROL
   0098          +1    58     SCON1          DATA 098H    ; UART 1 CONTROL
-A51 MACRO ASSEMBLER  MAIN                                                                 08/17/2023 19:46:33 PAGE     2
+A51 MACRO ASSEMBLER  MAIN                                                                 08/17/2023 22:45:19 PAGE     2
 
   0099          +1    59     SBUF0          DATA 099H    ; UART 0 DATA BUFFER
   0099          +1    60     SBUF1          DATA 099H    ; UART 1 DATA BUFFER
@@ -133,7 +133,7 @@ LOC  OBJ            LINE     SOURCE
   00CB          +1   122     RCAP2H         DATA 0CBH    ; TIMER/COUNTER 2 CAPTURE/RELOAD HIGH BYTE
   00CB          +1   123     RCAP3H         DATA 0CBH    ; TIMER 3 CAPTURE/RELOAD HIGH BYTE
   00CB          +1   124     RCAP4H         DATA 0CBH    ; TIMER/COUNTER 4 CAPTURE/RELOAD HIGH BYTE
-A51 MACRO ASSEMBLER  MAIN                                                                 08/17/2023 19:46:33 PAGE     3
+A51 MACRO ASSEMBLER  MAIN                                                                 08/17/2023 22:45:19 PAGE     3
 
   00CC          +1   125     TMR2L          DATA 0CCH    ; TIMER/COUNTER 2 LOW BYTE
   00CC          +1   126     TMR3L          DATA 0CCH    ; TIMER 3 LOW BYTE
@@ -201,7 +201,7 @@ LOC  OBJ            LINE     SOURCE
   008E          +1   188     TR1            BIT 08EH     ; TIMER 1 ON/OFF CONTROL
   008D          +1   189     TF0            BIT 08DH     ; TIMER 0 OVERFLOW FLAG
   008C          +1   190     TR0            BIT 08CH     ; TIMER 0 ON/OFF CONTROL
-A51 MACRO ASSEMBLER  MAIN                                                                 08/17/2023 19:46:33 PAGE     4
+A51 MACRO ASSEMBLER  MAIN                                                                 08/17/2023 22:45:19 PAGE     4
 
   008B          +1   191     IE1            BIT 08BH     ; EXT. INTERRUPT 1 EDGE FLAG
   008A          +1   192     IT1            BIT 08AH     ; EXT. INTERRUPT 1 TYPE
@@ -269,7 +269,7 @@ LOC  OBJ            LINE     SOURCE
                 +1   254     
                 +1   255     ; SMB0CN 0C0H
   00C7          +1   256     BUSY           BIT 0C7H     ; SMBUS 0 BUSY
-A51 MACRO ASSEMBLER  MAIN                                                                 08/17/2023 19:46:33 PAGE     5
+A51 MACRO ASSEMBLER  MAIN                                                                 08/17/2023 22:45:19 PAGE     5
 
   00C6          +1   257     ENSMB          BIT 0C6H     ; SMBUS 0 ENABLE
   00C5          +1   258     STA            BIT 0C5H     ; SMBUS 0 START FLAG
@@ -337,7 +337,7 @@ LOC  OBJ            LINE     SOURCE
   00EB          +1   320     AD0CM1         BIT 0EBH     ; ADC 0 CONVERT START MODE BIT 1
   00EA          +1   321     AD0CM0         BIT 0EAH     ; ADC 0 CONVERT START MODE BIT 0
   00E9          +1   322     AD0WINT        BIT 0E9H     ; ADC 0 WINDOW INTERRUPT FLAG
-A51 MACRO ASSEMBLER  MAIN                                                                 08/17/2023 19:46:33 PAGE     6
+A51 MACRO ASSEMBLER  MAIN                                                                 08/17/2023 22:45:19 PAGE     6
 
   00E8          +1   323     AD0LJST        BIT 0E8H     ; ADC 0 LEFT JUSTIFY DATA BIT
                 +1   324     
@@ -397,496 +397,484 @@ LOC  OBJ            LINE     SOURCE
                              стр. "F")
 000E 758A83          378             MOV OSCICN,             #0x83   ; Внутренний генератор включения, частота 24,5 MГц 
                              (OSCICN" стр. "F")
-                     379     
-                     380     ;------------------------------------------------------------------------------------------
+                     379     ;------------------------------------------------------------------------------------------
                              ---
-                     381     
-                     382     ; Настраиваем все пины.
-0011 758400          383             MOV             SFRPAGE,        #0x00           ; стр. "0"
-                     384             
-0014 759D04          385             MOV             SPI0CKR,        #4 ; Эту частоту ДВ на рандом поставил. 
-A51 MACRO ASSEMBLER  MAIN                                                                 08/17/2023 19:46:33 PAGE     7
+                     380     
+                     381     ;Настраиваем все пины.
+0011 758400          382             MOV             SFRPAGE,        #0x00           ;Стр. "0"
+                     383             
+0014 759D04          384             MOV             SPI0CKR,        #4                      ;Эту частоту ДВ на рандом п
+                             оставил. 
+A51 MACRO ASSEMBLER  MAIN                                                                 08/17/2023 22:45:19 PAGE     7
 
-0017 759A40          386             MOV             SPI0CFG,        #01000000b      ; включаем ведущий режим
-001A 75F801          387             MOV             SPI0CN,         #00000001b      ; включаем модуль SPI0
-                     388             
-001D 75840F          389             MOV             SFRPAGE,        #0x0F           ; стр. "F"
-0020 75A415          390             MOV             P0MDOUT,        #00010101b      
-0023 7580FF          391             MOV             P0,                     #11111111b
-                     392     
-0026 75A602          393             MOV             P2MDOUT,        #00000010b      
-0029 75A0FF          394             MOV             P2,                     #11111111b
-                     395     
-                     396     ; Подключаем пины к матрице
-002C 75E102          397             MOV             XBR0,           #00000010b
-002F 75E340          398             MOV             XBR2,           #01000000b
-                     399             
-0032 758400          400             MOV             SFRPAGE,        #0x00           ; стр. "0"      
-0035 7A06            401             MOV             R2,                     #6
-                     402             
-0037 75B100          403             MOV             PSBANK,         #00000000b
-                     404     
-                     405     ;1. Реализуем сброс кодека. Для того на пине RESETN установим 0, подождем немного, а потом 
+0017 759A40          385             MOV             SPI0CFG,        #01000000b      ;Включаем ведущий режим
+001A 75F801          386             MOV             SPI0CN,         #00000001b      ;Включаем модуль SPI0
+                     387             
+001D 75840F          388             MOV             SFRPAGE,        #0x0F           ;Стр. "F"
+0020 75A415          389             MOV             P0MDOUT,        #00010101b      
+0023 7580FF          390             MOV             P0,                     #11111111b
+                     391     
+0026 75A602          392             MOV             P2MDOUT,        #00000010b      
+0029 75A0FF          393             MOV             P2,                     #11111111b
+                     394     
+                     395     ;Подключаем пины к матрице
+002C 75E102          396             MOV             XBR0,           #00000010b
+002F 75E340          397             MOV             XBR2,           #01000000b
+                     398             
+0032 758400          399             MOV             SFRPAGE,        #0x00                   
+0035 7A06            400             MOV             R2,                     #6
+                     401             
+0037 75B111          402             MOV             PSBANK,         #00010001b                      ;ВАЖНО ТУТ ПОМЕНЯТЬ
+                              0 БАЙТ.
+                     403     
+                     404     ;1. Реализуем сброс кодека. Для того на пине RESETN установим 0, подождем немного, а потом 
                              установим 1.
-003A C2A1            406             CLR             PIN_RESETN
-003C 318C            407             ACALL   Wait_long
-003E D2A1            408             SETB    PIN_RESETN      
-0040 318C            409             ACALL   Wait_long               ;Как оказалось, кодеку туть нужно время на подумать
-                             .
+003A C2A1            405             CLR             PIN_RESETN
+003C 3175            406             ACALL   Wait_long
+003E D2A1            407             SETB    PIN_RESETN      
+0040 3175            408             ACALL   Wait_long                       ;Как оказалось, кодеку туть нужно время на 
+                             подумать.
+                     409     
                      410     
-                     411     
-                     412     ;Loop:
-                     413     
-                     414     ;2. Прочитаем содержимое регистра $4F, для того организуем поточную транзацию с импользован
-                             ием SPI.
-0042                 415             Wait_for_3_control_words:
-0042 C284            416             CLR             PIN_CSN
-0044 3187            417             ACALL   Wait_short
-                     418             
-0046 744F            419             MOV             A,              #0x4F   ;Передаем в подрограмму адрес регистра коде
-                             ка, который хотим прочитать.
-0048 3195            420             ACALL   SPI0                    
-                     421     
-004A 3195            422             ACALL   SPI0                    ;На втором байте считываем сами данные.
-                     423             
-004C D284            424             SETB            PIN_CSN
-                     425             
-004E B403F1          426             CJNE    A,              #0x03,          Wait_for_3_control_words        ;Сравнение 
-                             аккумулятора с константой и переход, если не равно.
-                     427     
-                     428     
-                     429     ;3. Считаем из регистра $4D 6 байт. По идее, мы с ними ничего делать не должны.
-0051 C284            430             CLR             PIN_CSN
-0053 3187            431             ACALL   Wait_short
-                     432             
-0055 744D            433             MOV             A,              #0x4D   
-0057 3195            434             ACALL   SPI0                    
-                     435             
-0059                 436             Read_6_bytes:
-0059 3195            437                     ACALL   SPI0                    
-005B DAFC            438                     DJNZ    R2,             Read_6_bytes
-005D 7A06            439             MOV             R2,             #6
-                     440                     
-005F D284            441             SETB            PIN_CSN
-                     442             
-                     443             
-                     444     ;4. Соображаем, какой блок мы собираемся обрабатывать.
-0061 7F01            445             MOV             R7,             #1                      ;Задаем начальное значение 
-                             счетчику блоков.
-A51 MACRO ASSEMBLER  MAIN                                                                 08/17/2023 19:46:33 PAGE     8
-
-                     446             
-0063                 447             Start_of_N_block:
-0063 3187            448                     ACALL   Wait_short
-0065 BF0102          449                     CJNE    R7,             #1,             Not_1st_block
-0068 31A9            450                     ACALL   Writing_constants_to_RAM_1
-006A                 451                     Not_1st_block:  
-006A BF0202          452                             CJNE    R7,             #2,             Not_2st_block
-006D 31CD            453                             ACALL   Writing_constants_to_RAM_2
-006F                 454                             Not_2st_block:
-006F BF0302          455                                     CJNE    R7,             #3,             Not_3st_block
-0072 31F1            456                                     ACALL   Writing_constants_to_RAM_3
-0074                 457                                     Not_3st_block:
-                     458             
-0074 908000          459             MOV             DPTR,   #0x8000         ;Задаем начальный адрес указателя флш-памят
-                             и.
-                     460     
-                     461     ;5. В регистр кодека $49 нужно передать длину блока из регистров $27 и $28 МК.
-0077 7928            462             MOV             R1,             #0x28
-                     463             
-0079 C284            464             CLR             PIN_CSN
-007B 3187            465             ACALL   Wait_short
-                     466             
-007D 7449            467             MOV             A,              #0x49
-007F 31A1            468             ACALL   SPI01
-                     469             
-0081 E3              470             MOVX    A,              @R1
-0082 31A1            471             ACALL   SPI01
-                     472             
-0084 19              473             DEC             R1
-0085 E3              474             MOVX    A,              @R1
-0086 31A1            475             ACALL   SPI01
-                     476             
-0088 D284            477             SETB    PIN_CSN
-008A 3187            478             ACALL   Wait_short
-                     479     
-                     480     ;6. В регистр кодека $49 нужно передать начальный адрес блока из регистров $25 и $26 МК.
-008C 7926            481             MOV             R1,             #0x26
-                     482             
-008E C284            483             CLR             PIN_CSN
-0090 3187            484             ACALL   Wait_short
-                     485             
-0092 7449            486             MOV             A,              #0x49
-0094 31A1            487             ACALL   SPI01
-                     488             
-0096 E3              489             MOVX    A,              @R1
-0097 31A1            490             ACALL   SPI01
-                     491             
-0099 19              492             DEC             R1
-009A E3              493             MOVX    A,              @R1
-009B 31A1            494             ACALL   SPI01
-                     495             
-009D D284            496             SETB    PIN_CSN
-009F 3187            497             ACALL   Wait_short
-                     498             
-                     499     ;7. Если перед нами 3 блок, то сразу переходим к активации.
-00A1 BF0303          500             CJNE    R7,             #3,             Processing_of_basic_blocks
-00A4 020130          501             LJMP    Processing_of_the_activation_block
-                     502     
-                     503     ;8. Передаем слова кодеку из основных блоков.
-00A7                 504             Processing_of_basic_blocks:
-                     505             
-                     506     ;Ожидаем опустошения буфера FIFO-in, т.е. регистра $4B.
-00A7                 507             Wait_for_FIFO_emptying: 
-00A7 C284            508                     CLR             PIN_CSN
-00A9 3187            509                     ACALL   Wait_short
-                     510             
-A51 MACRO ASSEMBLER  MAIN                                                                 08/17/2023 19:46:33 PAGE     9
-
-00AB 744B            511                     MOV             A,              #0x4B
-00AD 3195            512                     ACALL   SPI0
-00AF 3195            513                     ACALL   SPI0
-00B1 B400F3          514                     CJNE    A,              #0x00,          Wait_for_FIFO_emptying
-00B4 7E80            515             MOV             R6,             #128            ;Задаем начальное значение счетчику
-                              слов.
-                     516             
-00B6 E5B1            517             MOV             A,                      PSBANK
-00B8 2410            518             ADD             A,              #00010000b              ;Для первого банка.
-00BA F5B1            519             MOV             PSBANK,                 A
-                     520             
-00BC C284            521             CLR             PIN_CSN
-00BE 3187            522             ACALL   Wait_short
-                     523             
-                     524     ;9. Передаем одно слово.
-00C0 7449            525             MOV             A,              #0x49
-00C2 3195            526             ACALL   SPI0
-00C4                 527             Not_end_of_128_words_fragment:
-00C4                 528             Next_word:
-00C4 7D02            529                     MOV             R5,             #2
-00C6                 530                     Next_byte_of_word:
-00C6 93              531                             MOVC    A,                      @A+DPTR                 ;Перенесем 
-                             из флш-памяти в аккумулятор 1 байт с адресом DPTR.
-00C7 31A1            532                             ACALL   SPI01                                           ;Передаем т
-                             от байт по SPI.
-00C9 A3              533                             INC     DPTR
-00CA DDFA            534                             DJNZ    R5,             Next_byte_of_word
-                     535             
-                     536     ;Поместим в аккумулятор старший (т.е. левый) байт регистра DPTR.
-00CC E583            537             MOV             A,              DPH
-00CE B40009          538             CJNE    A,              #0,             Not_end_of_the_bank
-                     539             
-00D1 E5B1            540             MOV             A,                      PSBANK          ;выбираем следующий банк.
-00D3 2410            541             ADD             A,              #00010000b              
-00D5 F5B1            542             MOV             PSBANK,                 A       
-                     543             
-00D7 908000          544             MOV             DPTR,   #0x8000         ;Задаем начальный адрес указателя флш-памят
-                             и.
-                     545     
-00DA                 546             Not_end_of_the_bank:
-                     547     ;Декремент длины блока, т.е. регистров $27 и $28. В общем, надо то грамотно организоваться.
-00DA 7928            548             MOV             R1,             #0x28
-00DC E3              549             MOVX    A,              @R1
-00DD B40007          550             CJNE    A,              #0x0,           Register_28_is_not_0
-                     551             
-00E0 7928            552             MOV             R1,             #0x28
-00E2 E3              553             MOVX    A,              @R1
-00E3 14              554             DEC             A
-00E4 F3              555             MOVX    @R1,    A
-00E5 8004            556             SJMP    Next_step
-                     557             
-00E7                 558             Register_28_is_not_0:
-00E7 14              559                     DEC             A
-00E8 F3              560                     MOVX    @R1,    A
-00E9 8000            561                     SJMP    Next_step
-                     562                     
-00EB                 563             Next_step:      
-                     564     ;Логическое "или" регистров $27 и $28.
-00EB 7928            565             MOV             R1,             #0x28
-00ED E3              566             MOVX    A,              @R1
-00EE FA              567             MOV             R2,             A
-                     568             
-00EF 7927            569             MOV             R1,             #0x27
-00F1 E3              570             MOVX    A,              @R1
-                     571             
-00F2 4A              572             ORL             A,              R2              ;При том результат заносится в акку
-A51 MACRO ASSEMBLER  MAIN                                                                 08/17/2023 19:46:33 PAGE    10
-
-                             мулятор.
-00F3 B40030          573             CJNE    A,              #0x0,           Not_end_of_block
-                     574             
-00F6 D284            575             SETB    PIN_CSN
-                     576             
-                     577     ;Считываем регистр $4F и ожидаем там увидеть цифру 2, т.е. пришло 2 контрольных слова.
-00F8                 578             Wait_for_2_control_words:
-00F8 C284            579                     CLR             PIN_CSN
-00FA 3187            580                     ACALL   Wait_short
-                     581             
-00FC 744F            582                     MOV             A,              #0x4F   ;Передаем в подрограмму адрес регис
+                     411     ;2. Прочитаем содержимое регистра $4F, для того организуем потоковую транзацию с импользова
+                             нием SPI.
+0042                 412             Wait_for_3_control_words:
+0042 C284            413                     CLR             PIN_CSN
+0044 3170            414                     ACALL   Wait_short
+                     415             
+0046 744F            416                     MOV             A,              #0x4F   ;Передаем в подрограмму адрес регис
                              тра кодека, который хотим прочитать.
-00FE 3195            583                     ACALL   SPI0                    
-0100 3195            584                     ACALL   SPI0                    ;На втором байте считываем сами данные.
-                     585             
-0102 D284            586                     SETB            PIN_CSN
-                     587             
-0104 B402F1          588                     CJNE    A,              #0x02,          Wait_for_2_control_words
-                     589             
-                     590     ;Считываем из регистра $4D 4 байта контрольной суммы и сравниваем их с верными значениями и
-                             з регистров $21-$24.
-0107 C284            591                     CLR             PIN_CSN
-0109 3187            592                     ACALL   Wait_short
+0048 317E            417                     ACALL   SPI0                    
+004A 317E            418                     ACALL   SPI0                    ;На втором байте считываем данные от кодека
+                             .
+                     419             
+004C D284            420                     SETB            PIN_CSN
+004E B403F1          421                     CJNE    A,              #0x03,          Wait_for_3_control_words        ;Ср
+                             авнение аккумулятора с константой и переход, если не равно.
+                     422     
+                     423     
+                     424     ;3. Считаем из регистра $4D 6 байт. По идее, мы с ними ничего делать не должны.
+0051 C284            425             CLR             PIN_CSN
+0053 3170            426             ACALL   Wait_short
+                     427             
+0055 744D            428             MOV             A,              #0x4D   
+0057 317E            429             ACALL   SPI0                    
+                     430             
+0059                 431             Read_6_bytes:
+0059 317E            432                     ACALL   SPI0                    
+005B DAFC            433                     DJNZ    R2,             Read_6_bytes
+005D 7A06            434             MOV             R2,             #6
+                     435                     
+005F D284            436             SETB            PIN_CSN
+                     437             
+                     438             
+                     439     ;4. Соображаем, какой блок мы собираемся обрабатывать.
+0061 7F01            440             MOV             R7,             #1                      ;Задаем начальное значение 
+                             счетчику блоков.
+0063 908000          441             MOV             DPTR,   #0x8000         ;Задаем начальный адрес указателя флш-памят
+                             и И НИКУДА НЕ ПЕРЕНОСИМ ЭТУ СТРОЧКУ!
+A51 MACRO ASSEMBLER  MAIN                                                                 08/17/2023 22:45:19 PAGE     8
+
+                     442             
+0066                 443             Start_of_N_block:
+0066 3170            444                     ACALL   Wait_short
+0068 A883            445                     MOV             R0,             DPH
+006A A982            446                     MOV             R1,             DPL
+                     447                     
+006C BF0102          448                     CJNE    R7,             #1,             Not_1st_block
+006F 3192            449                     ACALL   Writing_constants_to_RAM_1
+0071                 450                     Not_1st_block:  
+0071 BF0202          451                             CJNE    R7,             #2,             Not_2st_block
+0074 31B6            452                             ACALL   Writing_constants_to_RAM_2
+0076                 453                             Not_2st_block:
+0076 BF0302          454                                     CJNE    R7,             #3,             Not_3st_block
+0079 31DA            455                                     ACALL   Writing_constants_to_RAM_3
+007B                 456                                     Not_3st_block:
+                     457                     
+007B 8883            458                     MOV             DPH,    R0
+007D 8982            459                     MOV             DPL,    R1
+                     460                     
+                     461                     
+                     462     ;5. В регистр кодека $49 нужно передать длину блока из регистров $27 и $28 МК.
+007F 7928            463             MOV             R1,             #0x28
+                     464             
+0081 C284            465             CLR             PIN_CSN
+0083 3170            466             ACALL   Wait_short
+                     467             
+0085 7449            468             MOV             A,              #0x49
+0087 318A            469             ACALL   SPI01
+                     470             
+0089 E3              471             MOVX    A,              @R1
+008A 318A            472             ACALL   SPI01
+                     473             
+008C 19              474             DEC             R1
+008D E3              475             MOVX    A,              @R1
+008E 318A            476             ACALL   SPI01
+                     477             
+0090 D284            478             SETB    PIN_CSN
+0092 3170            479             ACALL   Wait_short
+                     480     
+                     481     
+                     482     ;6. В регистр кодека $49 нужно передать начальный адрес блока из регистров $25 и $26 МК.
+0094 7926            483             MOV             R1,             #0x26
+                     484             
+0096 C284            485             CLR             PIN_CSN
+0098 3170            486             ACALL   Wait_short
+                     487             
+009A 7449            488             MOV             A,              #0x49
+009C 318A            489             ACALL   SPI01
+                     490             
+009E E3              491             MOVX    A,              @R1
+009F 318A            492             ACALL   SPI01
+                     493             
+00A1 19              494             DEC             R1
+00A2 E3              495             MOVX    A,              @R1
+00A3 318A            496             ACALL   SPI01
+                     497             
+00A5 D284            498             SETB    PIN_CSN
+00A7 3170            499             ACALL   Wait_short
+                     500             
+                     501             
+                     502     ;7. Если перед нами 3 блок, то сразу переходим к активации.
+00A9 BF0303          503             CJNE    R7,             #3,             Processing_of_basic_blocks
+00AC 020135          504             LJMP    Processing_of_the_activation_block
+                     505     
+                     506     
+                     507     ;8. Передаем слова кодеку из основных блоков.
+A51 MACRO ASSEMBLER  MAIN                                                                 08/17/2023 22:45:19 PAGE     9
+
+00AF                 508             Processing_of_basic_blocks:
+                     509             
+                     510     ;8.1. Ожидаем опустошения буфера FIFO-in, т.е. регистра $4B.
+00AF                 511             Wait_for_FIFO_emptying: 
+00AF C284            512                     CLR             PIN_CSN
+00B1 3170            513                     ACALL   Wait_short
+                     514             
+00B3 744B            515                     MOV             A,              #0x4B
+00B5 317E            516                     ACALL   SPI0
+00B7 317E            517                     ACALL   SPI0
+00B9 B400F3          518                     CJNE    A,              #0x00,          Wait_for_FIFO_emptying
+                     519                     
+00BC 7E80            520             MOV             R6,             #128                    ;Задаем начальное значение 
+                             счетчику слов.
+                     521             
+00BE C284            522             CLR             PIN_CSN
+00C0 3170            523             ACALL   Wait_short
+                     524             
+                     525     ;8.2. Передаем одно слово.
+00C2 7449            526             MOV             A,              #0x49
+00C4 317E            527             ACALL   SPI0
+                     528     
+                     529             ;Not_end_of_128_words_fragment:
+00C6                 530             Next_word:
+00C6 7D02            531                     MOV             R5,             #2
+00C8                 532                     Next_byte_of_word:
+00C8 93              533                             MOVC    A,                      @A+DPTR                 ;Перенесем 
+                             из флш-памяти в аккумулятор 1 байт с адресом DPTR.
+00C9 318A            534                             ACALL   SPI01                                           ;Передаем т
+                             от байт по SPI.
+00CB A3              535                             INC     DPTR
+00CC DDFA            536                             DJNZ    R5,             Next_byte_of_word
+                     537             
+                     538     ;8.3. Проверяем, не закончился ли банк.
+                     539             ;8.3.1. Поместим в аккумулятор старший (т.е. левый) байт регистра DPTR.
+00CE E583            540             MOV             A,              DPH
+00D0 B40009          541             CJNE    A,              #0,             Not_end_of_the_bank
+                     542             
+00D3 E5B1            543             MOV             A,                      PSBANK          ;Выбираем следующий банк.
+00D5 2410            544             ADD             A,              #00010000b              
+00D7 F5B1            545             MOV             PSBANK,                 A       
+                     546             
+00D9 908000          547             MOV             DPTR,   #0x8000                 ;Задаем начальный адрес указателя ф
+                             лш-памяти.
+                     548     
+00DC                 549             Not_end_of_the_bank:
+                     550             
+                     551     ;8.4. Декремент длины блока в ручную, т.е. регистров $27 и $28.
+00DC 7928            552             MOV             R1,             #0x28
+00DE E3              553             MOVX    A,              @R1
+00DF B40008          554             CJNE    A,              #0,             Register_28_is_not_0
+                     555             
+00E2 7928            556             MOV             R1,             #0x28
+00E4 E3              557             MOVX    A,              @R1
+00E5 14              558             DEC             A
+00E6 F3              559             MOVX    @R1,    A
+00E7 0200EF          560             LJMP    Next_step
+                     561             
+00EA                 562             Register_28_is_not_0:
+00EA 14              563                     DEC             A
+00EB F3              564                     MOVX    @R1,    A
+00EC 0200EF          565                     LJMP    Next_step
+                     566             
+                     567             
+00EF                 568             Next_step:      
+                     569     ;8.5. Логическое "или" регистров $27 и $28.
+A51 MACRO ASSEMBLER  MAIN                                                                 08/17/2023 22:45:19 PAGE    10
+
+00EF 7928            570             MOV             R1,             #0x28
+00F1 E3              571             MOVX    A,              @R1
+00F2 FA              572             MOV             R2,             A
+                     573             
+00F3 7927            574             MOV             R1,             #0x27
+00F5 E3              575             MOVX    A,              @R1
+                     576             
+00F6 4A              577             ORL             A,              R2                      ;При том результат заноситс
+                             я в аккумулятор.
+00F7 B40030          578             CJNE    A,              #0,             Not_end_of_block
+                     579             
+00FA D284            580             SETB    PIN_CSN
+                     581             
+                     582     ;8.6. Считываем регистр $4F и ожидаем там увидеть цифру 2, т.е. пришло 2 контрольных слова.
+00FC                 583             Wait_for_2_control_words:
+00FC C284            584                     CLR             PIN_CSN
+00FE 3170            585                     ACALL   Wait_short
+                     586             
+0100 744F            587                     MOV             A,              #0x4F   
+0102 317E            588                     ACALL   SPI0                    
+0104 317E            589                     ACALL   SPI0                    
+                     590             
+0106 D284            591                     SETB            PIN_CSN
+0108 B402F1          592                     CJNE    A,              #0x02,          Wait_for_2_control_words
                      593             
-010B 744D            594                     MOV             A,              #0x4D   
-010D 3195            595                     ACALL   SPI0                    
-010F 3195            596                     ACALL   SPI0
-0111 B4FF19          597                             CJNE    A,              #0xFF,          Error1          ;Может быть
-                             , тут другой порядок байт.
-0114 3195            598                     ACALL   SPI0
-0116 B4FF14          599                             CJNE    A,              #0xFF,          Error1
-0119 3195            600                     ACALL   SPI0
-011B B4CE0F          601                             CJNE    A,              #0xCE,          Error1
-011E 3195            602                     ACALL   SPI0
-0120 B4460A          603                             CJNE    A,              #0x46,          Error1
-                     604                     
-0123 D284            605                     SETB            PIN_CSN
-                     606             
-0125 0F              607                     INC             R7
-                     608             
-0126                 609             Not_end_of_block:
-0126 DE9C            610                     DJNZ    R6,             Not_end_of_128_words_fragment 
-                     611                     
-0128 D284            612                     SETB            PIN_CSN
-012A 0200A7          613                     LJMP            Wait_for_FIFO_emptying
-                     614             
-012D                 615             Error1:
-012D 020000          616                     LJMP    Start
+                     594     ;8.7. Считываем из регистра $4D 4 байта контрольной суммы и сравниваем их с верными значени
+                             ями из регистров $21-$24.
+010B C284            595                     CLR             PIN_CSN
+010D 3170            596                     ACALL   Wait_short
+                     597             
+010F 744D            598                     MOV             A,              #0x4D   
+0111 317E            599                     ACALL   SPI0                    
+0113 317E            600                     ACALL   SPI0
+0115 B4FF19          601                             CJNE    A,              #0xFF,          Error           
+0118 317E            602                     ACALL   SPI0
+011A B4FF14          603                             CJNE    A,              #0xFF,          Error
+011D 317E            604                     ACALL   SPI0
+011F B4CE0F          605                             CJNE    A,              #0xCE,          Error
+0122 317E            606                     ACALL   SPI0
+0124 B4460A          607                             CJNE    A,              #0x46,          Error
+                     608                     
+0127 D284            609                     SETB            PIN_CSN
+0129 0F              610                     INC             R7
+                     611             
+012A                 612             Not_end_of_block:
+012A DE9A            613                     DJNZ    R6,             Next_word 
+                     614                     
+012C D284            615                     SETB            PIN_CSN
+012E 0200AF          616                     LJMP            Wait_for_FIFO_emptying
                      617             
-0130                 618             Processing_of_the_activation_block:
-0130                 619                     Wait_for_chip_activation:
-0130 C284            620                             CLR             PIN_CSN
-0132 3187            621                             ACALL   Wait_short
-                     622             
-0134 747E            623                             MOV             A,              #0x7E   
-0136 3195            624                             ACALL   SPI0                    
-0138 3195            625                             ACALL   SPI0
-013A B401F3          626                             CJNE    A,              #0x1,           Wait_for_chip_activation   
-                                          ;Может быть, тут другой порядок байт.
-                     627                     
-013D D284            628                             SETB            PIN_CSN
-                     629                     
-013F                 630                     Wait_for_chic_ID:
-013F 3187            631                             ACALL           Wait_short
-                     632                             
-0141 C284            633                             CLR             PIN_CSN
-A51 MACRO ASSEMBLER  MAIN                                                                 08/17/2023 19:46:33 PAGE    11
+                     618             
+                     619     ;9. Решение на все случчаи жизни - перезагрузка.
+0131                 620             Error:
+                     621                     ;LJMP   Start_program
+0131                 622                             Loop:
+0131 00              623                             NOP
+0132 020131          624                             LJMP Loop
+                     625             
+0135                 626             Processing_of_the_activation_block:
+0135                 627                     Wait_for_chip_activation:
+                     628     ;10. Проверяем, загружен ли FI.
+0135 C284            629                             CLR             PIN_CSN
+0137 3170            630                             ACALL   Wait_short
+                     631             
+0139 747E            632                             MOV             A,              #0x7E   
+013B 317E            633                             ACALL   SPI0                    
+A51 MACRO ASSEMBLER  MAIN                                                                 08/17/2023 22:45:19 PAGE    11
 
-0143 3187            634                             ACALL   Wait_short
-                     635             
-0145 744F            636                             MOV             A,              #0x4F   
-0147 3195            637                             ACALL   SPI0                    
-0149 3195            638                             ACALL   SPI0
-014B B400F1          639                             CJNE    A,              #0x0,           Wait_for_chic_ID           
-                                  ;Может быть, тут другой порядок байт.
+013D 317E            634                             ACALL   SPI0
+013F B440F3          635                             CJNE    A,              #01000000b,             Wait_for_chip_activ
+                             ation        
+                     636                     
+0142 D284            637                             SETB            PIN_CSN
+                     638                     
+0144 31ED            639                             ACALL           Wait_for_chip_ID
                      640                     
-014E D284            641                             SETB            PIN_CSN
-                     642                             
-0150 C284            643                             CLR             PIN_CSN
-0152 3187            644                             ACALL   Wait_short
-                     645             
-0154 7449            646                             MOV             A,              #0x49   
-0156 3195            647                             ACALL   SPI0                    
-0158 3195            648                             ACALL   SPI0
-015A B472D0          649                             CJNE    A,              #0x72,          Error1          ;Может быть
+                     641     ;Считываем из $4D 2 байта и сравниваем их с ID.
+0146 C284            642                             CLR             PIN_CSN
+0148 3170            643                             ACALL   Wait_short
+                     644             
+014A 7449            645                             MOV             A,              #0x49   
+014C 317E            646                             ACALL   SPI0                    
+014E 317E            647                             ACALL   SPI0
+0150 B472DE          648                             CJNE    A,              #0x72,          Error           ;Может быть
                              , тут другой порядок байт.
-015D 3195            650                             ACALL   SPI0
-015F B461CB          651                             CJNE    A,              #0x61,          Error1
-                     652                             
-0162 D284            653                             SETB            PIN_CSN
-                     654                             
-0164                 655                             Wait_for_chic_ID_1:
-0164 3187            656                             ACALL           Wait_short
-                     657                             
-0166 C284            658                             CLR             PIN_CSN
-0168 3187            659                             ACALL   Wait_short
-                     660             
-016A 744F            661                             MOV             A,              #0x4F   
-016C 3195            662                             ACALL   SPI0                    
-016E 3195            663                             ACALL   SPI0
-0170 B400F1          664                             CJNE    A,              #0x0,           Wait_for_chic_ID_1
-                     665                             
-0173 C284            666                             CLR             PIN_CSN
-0175 3187            667                             ACALL   Wait_short
-                     668             
-0177 7449            669                             MOV             A,              #0x49   
-0179 3195            670                             ACALL   SPI0                    
-017B 3195            671                             ACALL   SPI0
-017D B420AD          672                             CJNE    A,              #0x20,          Error1          ;Может быть
-                             , тут другой порядок байт.
-0180 3195            673                             ACALL   SPI0
-0182 B400A8          674                             CJNE    A,              #0x00,          Error1
-                     675                             
-0185 D284            676                             SETB            PIN_CSN
-                     677                             
-                     678     ;LJMP   Loop
-                     679     
-                     680     ;$include (My_library.inc)
-  0080          +1   681     PIN_SCLK                EQU             P0.0    ;SCK
-  0081          +1   682     PIN_RDATA               EQU             P0.1    ;MISO
-  0082          +1   683     PIN_CDATA               EQU             P0.2    ;MOSI
-  0084          +1   684     PIN_CSN                 EQU             P0.4    ;Вот тут вопрос. Эту лапку будем менять про
-                             граммно.
-  00A1          +1   685     PIN_RESETN              EQU             P2.1
-                +1   686             
-                +1   687             
-                +1   688     ;Задержки для SPI.
-0187            +1   689     Wait_short:
-0187            +1   690             Wait_sh:
-0187 D8FE       +1   691                     DJNZ    R0,                     Wait_sh
-0189 7864       +1   692             MOV             R0,                     #100
-018B 22         +1   693     RET
+0153 317E            649                             ACALL   SPI0
+0155 B461D9          650                             CJNE    A,              #0x61,          Error
+                     651                             
+0158 D284            652                             SETB            PIN_CSN
+015A 31ED            653                             ACALL           Wait_for_chip_ID
+                     654     ;Считываем из $4D 2 байта и сравниваем их с версией.
+015C C284            655                             CLR             PIN_CSN
+015E 3170            656                             ACALL   Wait_short
+                     657             
+0160 7449            658                             MOV             A,              #0x49   
+0162 317E            659                             ACALL   SPI0                    
+0164 317E            660                             ACALL   SPI0
+0166 B420C8          661                             CJNE    A,              #0x20,          Error           
+0169 317E            662                             ACALL   SPI0
+016B B400C3          663                             CJNE    A,              #0x00,          Error
+                     664                             
+016E D284            665                             SETB            PIN_CSN
+                     666                             
+                     667                             ;Loop:
+                     668                             ;NOP
+                     669                             ;LJMP Loop
+                     670     ;$include (My_library.inc)
+  0080          +1   671     PIN_SCLK                EQU             P0.0    ;SCK
+  0081          +1   672     PIN_RDATA               EQU             P0.1    ;MISO
+  0082          +1   673     PIN_CDATA               EQU             P0.2    ;MOSI
+  0084          +1   674     PIN_CSN                 EQU             P0.4    
+  00A1          +1   675     PIN_RESETN              EQU             P2.1
+                +1   676             
+                +1   677             
+                +1   678     ;Задержки для SPI.
+0170            +1   679     Wait_short:
+0170            +1   680             Wait_sh:
+0170 D8FE       +1   681                     DJNZ    R0,                     Wait_sh
+0172 7864       +1   682             MOV             R0,                     #100
+0174 22         +1   683     RET
+                +1   684     
+0175            +1   685     Wait_long:
+0175 7800       +1   686             MOV             R0,             #0
+0177 7900       +1   687             MOV             R1,             #0
+                +1   688             
+0179            +1   689             Wait_ln:
+0179 D8FE       +1   690                     DJNZ    R0,             Wait_ln
+017B D9FC       +1   691                     DJNZ    R1,             Wait_ln
+017D 22         +1   692     RET
+                +1   693     
                 +1   694     
-018C            +1   695     Wait_long:
-A51 MACRO ASSEMBLER  MAIN                                                                 08/17/2023 19:46:33 PAGE    12
+                +1   695     ;Непосредственно сам SPI. Возможно, требует доработок.
+017E            +1   696     SPI0:
+017E F59B       +1   697             MOV             SPI0DAT,        A
+A51 MACRO ASSEMBLER  MAIN                                                                 08/17/2023 22:45:19 PAGE    12
 
-018C 7800       +1   696             MOV             R0,             #0
-018E 7900       +1   697             MOV             R1,             #0
-                +1   698             
-0190            +1   699             Wait_ln:
-0190 D8FE       +1   700                     DJNZ    R0,             Wait_ln
-0192 D9FC       +1   701                     DJNZ    R1,             Wait_ln
-0194 22         +1   702     RET
-                +1   703     
-                +1   704     
-                +1   705     ;Непосредственно сам SPI. Возможно, требует доработок.
-0195            +1   706     SPI0:
-0195 F59B       +1   707             MOV             SPI0DAT,        A
-                +1   708     
-0197            +1   709     poll_SPIF:
-0197 30FFFD     +1   710             JNB             SPIF,           poll_SPIF       ;Ждем, пока  SPI сообщит о том, что
+                +1   698     
+0180            +1   699     poll_SPIF:
+0180 30FFFD     +1   700             JNB             SPIF,           poll_SPIF       ;Ждем, пока  SPI сообщит о том, что
                               все данные переданы.
-019A C2FF       +1   711             CLR             SPIF
-                +1   712     
-019C E59B       +1   713             MOV             A,                      SPI0DAT
-019E 3187       +1   714             ACALL   Wait_short
-01A0 22         +1   715     RET
-                +1   716     
-01A1            +1   717     SPI01:
-01A1 F59B       +1   718             MOV             SPI0DAT,        A
-                +1   719     
-01A3            +1   720     poll_SPIF1:
-01A3 30FFF1     +1   721             JNB             SPIF,           poll_SPIF       ;Ждем, пока  SPI сообщит о том, что
+0183 C2FF       +1   701             CLR             SPIF
+                +1   702     
+0185 E59B       +1   703             MOV             A,                      SPI0DAT
+0187 3170       +1   704             ACALL   Wait_short
+0189 22         +1   705     RET
+                +1   706     
+018A            +1   707     SPI01:
+018A F59B       +1   708             MOV             SPI0DAT,        A
+                +1   709     
+018C            +1   710     poll_SPIF1:
+018C 30FFF1     +1   711             JNB             SPIF,           poll_SPIF       ;Ждем, пока  SPI сообщит о том, что
                               все данные переданы.
-01A6 C2FF       +1   722             CLR             SPIF
-01A8 22         +1   723     RET
-                +1   724     
-                +1   725     ;Выбор кристалла.
-                +1   726     ;Down_the_crystal_selection:
-                +1   727     ;       CLR             PIN_CSN
-                +1   728     ;       ACALL   Wait_short              ;Согласно документации, тут должна быть задержка не
-                              менее 100 нс.
-                +1   729             
-                +1   730     ;Up_the_crystal_selection:
-                +1   731     ;       SETB    PIN_CSN
-                +1   732             ;может быть, сюда нужно будет добавить задержку.
-                +1   733     
-                +1   734             
-01A9            +1   735     Writing_constants_to_RAM_1:
-01A9 900021     +1   736             MOV             DPTR,   #0x21           ;Начало отсчета адресов XRAM.
-01AC 74FF       +1   737             MOV             A,              #0xFF
-01AE F0         +1   738             MOVX    @DPTR,  A                       ;Пересылка из аккумулятора в память.
-01AF A3         +1   739             INC             DPTR
+018F C2FF       +1   712             CLR             SPIF
+0191 22         +1   713     RET
+                +1   714             
+0192            +1   715     Writing_constants_to_RAM_1:
+0192 900021     +1   716             MOV             DPTR,   #0x21           ;Начало отсчета адресов XRAM.
+0195 74FF       +1   717             MOV             A,              #0xFF
+0197 F0         +1   718             MOVX    @DPTR,  A                       ;Пересылка из аккумулятора в память.
+0198 A3         +1   719             INC             DPTR
+                +1   720             
+0199 74FF       +1   721             MOV             A,              #0xFF   
+019B F0         +1   722             MOVX    @DPTR,  A                       
+019C A3         +1   723             INC             DPTR
+                +1   724             
+019D 74CE       +1   725             MOV             A,              #0xCE   
+019F F0         +1   726             MOVX    @DPTR,  A                       
+01A0 A3         +1   727             INC             DPTR
+                +1   728     
+01A1 7446       +1   729             MOV             A,              #0x46           
+01A3 F0         +1   730             MOVX    @DPTR,  A                       
+01A4 A3         +1   731             INC             DPTR
+                +1   732             
+01A5 7440       +1   733             MOV             A,              #0x40           
+01A7 F0         +1   734             MOVX    @DPTR,  A                       
+01A8 A3         +1   735             INC             DPTR
+                +1   736             
+01A9 7400       +1   737             MOV             A,              #0x00           
+01AB F0         +1   738             MOVX    @DPTR,  A                       
+01AC A3         +1   739             INC             DPTR
                 +1   740             
-01B0 74FF       +1   741             MOV             A,              #0xFF   
-01B2 F0         +1   742             MOVX    @DPTR,  A                       
-01B3 A3         +1   743             INC             DPTR
+01AD 74A2       +1   741             MOV             A,              #0xA2           
+01AF F0         +1   742             MOVX    @DPTR,  A                       
+01B0 A3         +1   743             INC             DPTR
                 +1   744             
-01B4 74CE       +1   745             MOV             A,              #0xCE   
-01B6 F0         +1   746             MOVX    @DPTR,  A                       
-01B7 A3         +1   747             INC             DPTR
-                +1   748     
-01B8 7446       +1   749             MOV             A,              #0x46           
-01BA F0         +1   750             MOVX    @DPTR,  A                       
-01BB A3         +1   751             INC             DPTR
-                +1   752             
-01BC 7440       +1   753             MOV             A,              #0x40           
-01BE F0         +1   754             MOVX    @DPTR,  A                       
-01BF A3         +1   755             INC             DPTR
-                +1   756             
-01C0 7400       +1   757             MOV             A,              #0x00           
-01C2 F0         +1   758             MOVX    @DPTR,  A                       
-A51 MACRO ASSEMBLER  MAIN                                                                 08/17/2023 19:46:33 PAGE    13
+01B1 7470       +1   745             MOV             A,              #0x70
+01B3 F0         +1   746             MOVX    @DPTR,  A                       
+01B4 A3         +1   747             INC             DPTR
+01B5 22         +1   748     RET
+                +1   749     
+01B6            +1   750     Writing_constants_to_RAM_2:
+01B6 900021     +1   751             MOV             DPTR,   #0x21
+01B9 7400       +1   752             MOV             A,              #0x00           
+01BB F0         +1   753             MOVX    @DPTR,  A                       
+01BC A3         +1   754             INC             DPTR
+                +1   755             
+01BD 7410       +1   756             MOV             A,              #0x10           
+01BF F0         +1   757             MOVX    @DPTR,  A                       
+01C0 A3         +1   758             INC             DPTR
+                +1   759             
+01C1 7422       +1   760             MOV             A,              #0x22           
+01C3 F0         +1   761             MOVX    @DPTR,  A                       
+A51 MACRO ASSEMBLER  MAIN                                                                 08/17/2023 22:45:19 PAGE    13
 
-01C3 A3         +1   759             INC             DPTR
-                +1   760             
-01C4 74A2       +1   761             MOV             A,              #0xA2           
-01C6 F0         +1   762             MOVX    @DPTR,  A                       
-01C7 A3         +1   763             INC             DPTR
-                +1   764             
-01C8 7470       +1   765             MOV             A,              #0x70
-01CA F0         +1   766             MOVX    @DPTR,  A                       
-01CB A3         +1   767             INC             DPTR
-01CC 22         +1   768     RET
-                +1   769     
-01CD            +1   770     Writing_constants_to_RAM_2:
-01CD 900021     +1   771             MOV             DPTR,   #0x21
-01D0 7400       +1   772             MOV             A,              #0x00           
-01D2 F0         +1   773             MOVX    @DPTR,  A                       
-01D3 A3         +1   774             INC             DPTR
+01C4 A3         +1   762             INC             DPTR
+                +1   763     
+01C5 74F6       +1   764             MOV             A,              #0xF6           
+01C7 F0         +1   765             MOVX    @DPTR,  A                       
+01C8 A3         +1   766             INC             DPTR
+                +1   767             
+01C9 7420       +1   768             MOV             A,              #0x20           
+01CB F0         +1   769             MOVX    @DPTR,  A                       
+01CC A3         +1   770             INC             DPTR
+                +1   771             
+01CD 7400       +1   772             MOV             A,              #0x00           
+01CF F0         +1   773             MOVX    @DPTR,  A                       
+01D0 A3         +1   774             INC             DPTR
                 +1   775             
-01D4 7410       +1   776             MOV             A,              #0x10           
-01D6 F0         +1   777             MOVX    @DPTR,  A                       
-01D7 A3         +1   778             INC             DPTR
+01D1 7418       +1   776             MOV             A,              #0x18   
+01D3 F0         +1   777             MOVX    @DPTR,  A                       
+01D4 A3         +1   778             INC             DPTR
                 +1   779             
-01D8 7422       +1   780             MOV             A,              #0x22           
-01DA F0         +1   781             MOVX    @DPTR,  A                       
-01DB A3         +1   782             INC             DPTR
-                +1   783     
-01DC 74F6       +1   784             MOV             A,              #0xF6           
-01DE F0         +1   785             MOVX    @DPTR,  A                       
-01DF A3         +1   786             INC             DPTR
-                +1   787             
-01E0 7420       +1   788             MOV             A,              #0x20           
-01E2 F0         +1   789             MOVX    @DPTR,  A                       
-01E3 A3         +1   790             INC             DPTR
-                +1   791             
-01E4 7400       +1   792             MOV             A,              #0x00           
-01E6 F0         +1   793             MOVX    @DPTR,  A                       
-01E7 A3         +1   794             INC             DPTR
-                +1   795             
-01E8 7418       +1   796             MOV             A,              #0x18   
-01EA F0         +1   797             MOVX    @DPTR,  A                       
-01EB A3         +1   798             INC             DPTR
-                +1   799             
-01EC 7410       +1   800             MOV             A,              #0x10           
-01EE F0         +1   801             MOVX    @DPTR,  A                       
-01EF A3         +1   802             INC             DPTR    
-01F0 22         +1   803     RET
-                +1   804     
-01F1            +1   805     Writing_constants_to_RAM_3:
-01F1 900025     +1   806             MOV             DPTR,   #0x25
-01F4 7440       +1   807             MOV             A,              #0x40           ;Для регистров $25 и далее.        
+01D5 7410       +1   780             MOV             A,              #0x10           
+01D7 F0         +1   781             MOVX    @DPTR,  A                       
+01D8 A3         +1   782             INC             DPTR    
+01D9 22         +1   783     RET
+                +1   784     
+01DA            +1   785     Writing_constants_to_RAM_3:
+01DA 900025     +1   786             MOV             DPTR,   #0x25
+01DD 7440       +1   787             MOV             A,              #0x40           ;Для регистров $25 и далее.        
                                   
-01F6 F0         +1   808             MOVX    @DPTR,  A                       
-01F7 A3         +1   809             INC             DPTR
-                +1   810             
-01F8 7410       +1   811             MOV             A,              #0x10           
-01FA F0         +1   812             MOVX    @DPTR,  A                       
-01FB A3         +1   813             INC             DPTR
-                +1   814             
-01FC 7400       +1   815             MOV             A,              #0x00   
-01FE F0         +1   816             MOVX    @DPTR,  A                       
-01FF A3         +1   817             INC             DPTR
-                +1   818     
-0200 7400       +1   819             MOV             A,              #0x00   
-0202 F0         +1   820             MOVX    @DPTR,  A                       
-                +1   821     
-0203 22         +1   822     RET
-                +1   823             
-A51 MACRO ASSEMBLER  MAIN                                                                 08/17/2023 19:46:33 PAGE    14
-
-                     824     
-                     825             
-                     826     END
-A51 MACRO ASSEMBLER  MAIN                                                                 08/17/2023 19:46:33 PAGE    15
+01DF F0         +1   788             MOVX    @DPTR,  A                       
+01E0 A3         +1   789             INC             DPTR
+                +1   790             
+01E1 7410       +1   791             MOV             A,              #0x10           
+01E3 F0         +1   792             MOVX    @DPTR,  A                       
+01E4 A3         +1   793             INC             DPTR
+                +1   794             
+01E5 7400       +1   795             MOV             A,              #0x00   
+01E7 F0         +1   796             MOVX    @DPTR,  A                       
+01E8 A3         +1   797             INC             DPTR
+                +1   798     
+01E9 7400       +1   799             MOV             A,              #0x00   
+01EB F0         +1   800             MOVX    @DPTR,  A                       
+                +1   801     
+01EC 22         +1   802     RET
+                +1   803             
+01ED            +1   804     Wait_for_chip_ID:
+01ED 3170       +1   805             ACALL           Wait_short
+                +1   806                             
+01EF C284       +1   807             CLR             PIN_CSN
+01F1 3170       +1   808             ACALL   Wait_short
+                +1   809             
+01F3 744F       +1   810             MOV             A,              #0x4F   
+01F5 317E       +1   811             ACALL   SPI0                    
+01F7 317E       +1   812             ACALL   SPI0
+01F9 B400F1     +1   813             CJNE    A,              #0,             Wait_for_chip_ID                
+                +1   814                     
+01FC D284       +1   815             SETB            PIN_CSN
+01FE 22         +1   816     RET
+                     817     
+                     818             
+                     819     END
+A51 MACRO ASSEMBLER  MAIN                                                                 08/17/2023 22:45:19 PAGE    14
 
 SYMBOL TABLE LISTING
 ------ ----- -------
@@ -954,7 +942,7 @@ CP0HYN0. . . . . . . . . . . . . .  B ADDR   0088H.0 A
 CP0HYN1. . . . . . . . . . . . . .  B ADDR   0088H.1 A   
 CP0HYP0. . . . . . . . . . . . . .  B ADDR   0088H.2 A   
 CP0HYP1. . . . . . . . . . . . . .  B ADDR   0088H.3 A   
-A51 MACRO ASSEMBLER  MAIN                                                                 08/17/2023 19:46:33 PAGE    16
+A51 MACRO ASSEMBLER  MAIN                                                                 08/17/2023 22:45:19 PAGE    15
 
 CP0OUT . . . . . . . . . . . . . .  B ADDR   0088H.6 A   
 CP0RIF . . . . . . . . . . . . . .  B ADDR   0088H.5 A   
@@ -1000,7 +988,7 @@ EMI0CN . . . . . . . . . . . . . .  D ADDR   00A2H   A
 EMI0TC . . . . . . . . . . . . . .  D ADDR   00A1H   A   
 EMI0_PAGE. . . . . . . . . . . . .  N NUMB   0000H   A   
 ENSMB. . . . . . . . . . . . . . .  B ADDR   00C0H.6 A   
-ERROR1 . . . . . . . . . . . . . .  C ADDR   012DH   A   
+ERROR. . . . . . . . . . . . . . .  C ADDR   0131H   A   
 ES0. . . . . . . . . . . . . . . .  B ADDR   00A8H.4 A   
 ET0. . . . . . . . . . . . . . . .  B ADDR   00A8H.1 A   
 ET1. . . . . . . . . . . . . . . .  B ADDR   00A8H.3 A   
@@ -1022,12 +1010,13 @@ FLSTAT . . . . . . . . . . . . . .  D ADDR   0088H   A
 IE . . . . . . . . . . . . . . . .  D ADDR   00A8H   A   
 IE0. . . . . . . . . . . . . . . .  B ADDR   0088H.1 A   
 IE1. . . . . . . . . . . . . . . .  B ADDR   0088H.3 A   
-A51 MACRO ASSEMBLER  MAIN                                                                 08/17/2023 19:46:33 PAGE    17
+A51 MACRO ASSEMBLER  MAIN                                                                 08/17/2023 22:45:19 PAGE    16
 
 IP . . . . . . . . . . . . . . . .  D ADDR   00B8H   A   
 IT0. . . . . . . . . . . . . . . .  B ADDR   0088H.0 A   
 IT1. . . . . . . . . . . . . . . .  B ADDR   0088H.2 A   
 LEGACY_PAGE. . . . . . . . . . . .  N NUMB   0000H   A   
+LOOP . . . . . . . . . . . . . . .  C ADDR   0131H   A   
 MAC0ACC0 . . . . . . . . . . . . .  D ADDR   0093H   A   
 MAC0ACC1 . . . . . . . . . . . . .  D ADDR   0094H   A   
 MAC0ACC2 . . . . . . . . . . . . .  D ADDR   0095H   A   
@@ -1048,15 +1037,14 @@ MAC0Z. . . . . . . . . . . . . . .  B ADDR   00C0H.2 A
 MAC0_PAGE. . . . . . . . . . . . .  N NUMB   0003H   A   
 MCE1 . . . . . . . . . . . . . . .  B ADDR   0098H.5 A   
 MODF . . . . . . . . . . . . . . .  B ADDR   00F8H.5 A   
-NEXT_BYTE_OF_WORD. . . . . . . . .  C ADDR   00C6H   A   
-NEXT_STEP. . . . . . . . . . . . .  C ADDR   00EBH   A   
-NEXT_WORD. . . . . . . . . . . . .  C ADDR   00C4H   A   
-NOT_1ST_BLOCK. . . . . . . . . . .  C ADDR   006AH   A   
-NOT_2ST_BLOCK. . . . . . . . . . .  C ADDR   006FH   A   
-NOT_3ST_BLOCK. . . . . . . . . . .  C ADDR   0074H   A   
-NOT_END_OF_128_WORDS_FRAGMENT. . .  C ADDR   00C4H   A   
-NOT_END_OF_BLOCK . . . . . . . . .  C ADDR   0126H   A   
-NOT_END_OF_THE_BANK. . . . . . . .  C ADDR   00DAH   A   
+NEXT_BYTE_OF_WORD. . . . . . . . .  C ADDR   00C8H   A   
+NEXT_STEP. . . . . . . . . . . . .  C ADDR   00EFH   A   
+NEXT_WORD. . . . . . . . . . . . .  C ADDR   00C6H   A   
+NOT_1ST_BLOCK. . . . . . . . . . .  C ADDR   0071H   A   
+NOT_2ST_BLOCK. . . . . . . . . . .  C ADDR   0076H   A   
+NOT_3ST_BLOCK. . . . . . . . . . .  C ADDR   007BH   A   
+NOT_END_OF_BLOCK . . . . . . . . .  C ADDR   012AH   A   
+NOT_END_OF_THE_BANK. . . . . . . .  C ADDR   00DCH   A   
 NSSMD0 . . . . . . . . . . . . . .  B ADDR   00F8H.2 A   
 NSSMD1 . . . . . . . . . . . . . .  B ADDR   00F8H.3 A   
 OSCICL . . . . . . . . . . . . . .  D ADDR   008BH   A   
@@ -1090,7 +1078,7 @@ PCA0CPH4 . . . . . . . . . . . . .  D ADDR   00EEH   A
 PCA0CPH5 . . . . . . . . . . . . .  D ADDR   00E2H   A   
 PCA0CPL0 . . . . . . . . . . . . .  D ADDR   00FBH   A   
 PCA0CPL1 . . . . . . . . . . . . .  D ADDR   00FDH   A   
-A51 MACRO ASSEMBLER  MAIN                                                                 08/17/2023 19:46:33 PAGE    18
+A51 MACRO ASSEMBLER  MAIN                                                                 08/17/2023 22:45:19 PAGE    17
 
 PCA0CPL2 . . . . . . . . . . . . .  D ADDR   00E9H   A   
 PCA0CPL3 . . . . . . . . . . . . .  D ADDR   00EBH   A   
@@ -1117,10 +1105,10 @@ PLL0DIV. . . . . . . . . . . . . .  D ADDR   008DH   A
 PLL0FLT. . . . . . . . . . . . . .  D ADDR   008FH   A   
 PLL0MUL. . . . . . . . . . . . . .  D ADDR   008EH   A   
 PLL0_PAGE. . . . . . . . . . . . .  N NUMB   000FH   A   
-POLL_SPIF. . . . . . . . . . . . .  C ADDR   0197H   A   
-POLL_SPIF1 . . . . . . . . . . . .  C ADDR   01A3H   A   
-PROCESSING_OF_BASIC_BLOCKS . . . .  C ADDR   00A7H   A   
-PROCESSING_OF_THE_ACTIVATION_BLOCK  C ADDR   0130H   A   
+POLL_SPIF. . . . . . . . . . . . .  C ADDR   0180H   A   
+POLL_SPIF1 . . . . . . . . . . . .  C ADDR   018CH   A   
+PROCESSING_OF_BASIC_BLOCKS . . . .  C ADDR   00AFH   A   
+PROCESSING_OF_THE_ACTIVATION_BLOCK  C ADDR   0135H   A   
 PS . . . . . . . . . . . . . . . .  B ADDR   00B8H.4 A   
 PSBANK . . . . . . . . . . . . . .  D ADDR   00B1H   A   
 PSCTL. . . . . . . . . . . . . . .  D ADDR   008FH   A   
@@ -1140,7 +1128,7 @@ RCAP4H . . . . . . . . . . . . . .  D ADDR   00CBH   A
 RCAP4L . . . . . . . . . . . . . .  D ADDR   00CAH   A   
 READ_6_BYTES . . . . . . . . . . .  C ADDR   0059H   A   
 REF0CN . . . . . . . . . . . . . .  D ADDR   00D1H   A   
-REGISTER_28_IS_NOT_0 . . . . . . .  C ADDR   00E7H   A   
+REGISTER_28_IS_NOT_0 . . . . . . .  C ADDR   00EAH   A   
 REN0 . . . . . . . . . . . . . . .  B ADDR   0098H.4 A   
 REN1 . . . . . . . . . . . . . . .  B ADDR   0098H.4 A   
 RI0. . . . . . . . . . . . . . . .  B ADDR   0098H.0 A   
@@ -1158,7 +1146,7 @@ SCON0. . . . . . . . . . . . . . .  D ADDR   0098H   A
 SCON1. . . . . . . . . . . . . . .  D ADDR   0098H   A   
 SFRLAST. . . . . . . . . . . . . .  D ADDR   0086H   A   
 SFRNEXT. . . . . . . . . . . . . .  D ADDR   0085H   A   
-A51 MACRO ASSEMBLER  MAIN                                                                 08/17/2023 19:46:33 PAGE    19
+A51 MACRO ASSEMBLER  MAIN                                                                 08/17/2023 22:45:19 PAGE    18
 
 SFRPAGE. . . . . . . . . . . . . .  D ADDR   0084H   A   
 SFRPGCN. . . . . . . . . . . . . .  D ADDR   0096H   A   
@@ -1175,8 +1163,8 @@ SMB0_PAGE. . . . . . . . . . . . .  N NUMB   0000H   A
 SMBFTE . . . . . . . . . . . . . .  B ADDR   00C0H.1 A   
 SMBTOE . . . . . . . . . . . . . .  B ADDR   00C0H.0 A   
 SP . . . . . . . . . . . . . . . .  D ADDR   0081H   A   
-SPI0 . . . . . . . . . . . . . . .  C ADDR   0195H   A   
-SPI01. . . . . . . . . . . . . . .  C ADDR   01A1H   A   
+SPI0 . . . . . . . . . . . . . . .  C ADDR   017EH   A   
+SPI01. . . . . . . . . . . . . . .  C ADDR   018AH   A   
 SPI0CFG. . . . . . . . . . . . . .  D ADDR   009AH   A   
 SPI0CKR. . . . . . . . . . . . . .  D ADDR   009DH   A   
 SPI0CN . . . . . . . . . . . . . .  D ADDR   00F8H   A   
@@ -1186,8 +1174,8 @@ SPIEN. . . . . . . . . . . . . . .  B ADDR   00F8H.0 A
 SPIF . . . . . . . . . . . . . . .  B ADDR   00F8H.7 A   
 SSTA0. . . . . . . . . . . . . . .  D ADDR   0091H   A   
 STA. . . . . . . . . . . . . . . .  B ADDR   00C0H.5 A   
-START. . . . . . . . . . . . . . .  C ADDR   0000H   A   
-START_OF_N_BLOCK . . . . . . . . .  C ADDR   0063H   A   
+START_OF_N_BLOCK . . . . . . . . .  C ADDR   0066H   A   
+START_PROGRAM. . . . . . . . . . .  C ADDR   0000H   A   
 STO. . . . . . . . . . . . . . . .  B ADDR   00C0H.4 A   
 TB80 . . . . . . . . . . . . . . .  B ADDR   0098H.3 A   
 TB81 . . . . . . . . . . . . . . .  B ADDR   0098H.3 A   
@@ -1226,25 +1214,24 @@ TR2. . . . . . . . . . . . . . . .  B ADDR   00C8H.2 A
 TR3. . . . . . . . . . . . . . . .  B ADDR   00C8H.2 A   
 TR4. . . . . . . . . . . . . . . .  B ADDR   00C8H.2 A   
 TXBMT. . . . . . . . . . . . . . .  B ADDR   00F8H.1 A   
-A51 MACRO ASSEMBLER  MAIN                                                                 08/17/2023 19:46:33 PAGE    20
+A51 MACRO ASSEMBLER  MAIN                                                                 08/17/2023 22:45:19 PAGE    19
 
 UART0_PAGE . . . . . . . . . . . .  N NUMB   0000H   A   
 UART1_PAGE . . . . . . . . . . . .  N NUMB   0001H   A   
-WAIT_FOR_2_CONTROL_WORDS . . . . .  C ADDR   00F8H   A   
+WAIT_FOR_2_CONTROL_WORDS . . . . .  C ADDR   00FCH   A   
 WAIT_FOR_3_CONTROL_WORDS . . . . .  C ADDR   0042H   A   
-WAIT_FOR_CHIC_ID . . . . . . . . .  C ADDR   013FH   A   
-WAIT_FOR_CHIC_ID_1 . . . . . . . .  C ADDR   0164H   A   
-WAIT_FOR_CHIP_ACTIVATION . . . . .  C ADDR   0130H   A   
-WAIT_FOR_FIFO_EMPTYING . . . . . .  C ADDR   00A7H   A   
-WAIT_LN. . . . . . . . . . . . . .  C ADDR   0190H   A   
-WAIT_LONG. . . . . . . . . . . . .  C ADDR   018CH   A   
-WAIT_SH. . . . . . . . . . . . . .  C ADDR   0187H   A   
-WAIT_SHORT . . . . . . . . . . . .  C ADDR   0187H   A   
+WAIT_FOR_CHIP_ACTIVATION . . . . .  C ADDR   0135H   A   
+WAIT_FOR_CHIP_ID . . . . . . . . .  C ADDR   01EDH   A   
+WAIT_FOR_FIFO_EMPTYING . . . . . .  C ADDR   00AFH   A   
+WAIT_LN. . . . . . . . . . . . . .  C ADDR   0179H   A   
+WAIT_LONG. . . . . . . . . . . . .  C ADDR   0175H   A   
+WAIT_SH. . . . . . . . . . . . . .  C ADDR   0170H   A   
+WAIT_SHORT . . . . . . . . . . . .  C ADDR   0170H   A   
 WCOL . . . . . . . . . . . . . . .  B ADDR   00F8H.6 A   
 WDTCN. . . . . . . . . . . . . . .  D ADDR   00FFH   A   
-WRITING_CONSTANTS_TO_RAM_1 . . . .  C ADDR   01A9H   A   
-WRITING_CONSTANTS_TO_RAM_2 . . . .  C ADDR   01CDH   A   
-WRITING_CONSTANTS_TO_RAM_3 . . . .  C ADDR   01F1H   A   
+WRITING_CONSTANTS_TO_RAM_1 . . . .  C ADDR   0192H   A   
+WRITING_CONSTANTS_TO_RAM_2 . . . .  C ADDR   01B6H   A   
+WRITING_CONSTANTS_TO_RAM_3 . . . .  C ADDR   01DAH   A   
 XBR0 . . . . . . . . . . . . . . .  D ADDR   00E1H   A   
 XBR1 . . . . . . . . . . . . . . .  D ADDR   00E2H   A   
 XBR2 . . . . . . . . . . . . . . .  D ADDR   00E3H   A   

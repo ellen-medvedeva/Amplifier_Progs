@@ -1,7 +1,7 @@
 PIN_SCLK		EQU		P0.0	;SCK
 PIN_RDATA		EQU		P0.1	;MISO
 PIN_CDATA		EQU		P0.2	;MOSI
-PIN_CSN			EQU		P0.4	;Вот тут вопрос. Эту лапку будем менять программно.
+PIN_CSN			EQU		P0.4	
 PIN_RESETN		EQU		P2.1
 	
 	
@@ -41,16 +41,6 @@ poll_SPIF1:
 	JNB		SPIF,		poll_SPIF	;Ждем, пока  SPI сообщит о том, что все данные переданы.
 	CLR		SPIF
 RET
-
-;Выбор кристалла.
-;Down_the_crystal_selection:
-;	CLR		PIN_CSN
-;	ACALL	Wait_short		;Согласно документации, тут должна быть задержка не менее 100 нс.
-	
-;Up_the_crystal_selection:
-;	SETB	PIN_CSN
-	;может быть, сюда нужно будет добавить задержку.
-
 	
 Writing_constants_to_RAM_1:
 	MOV		DPTR,	#0x21		;Начало отсчета адресов XRAM.
@@ -141,3 +131,16 @@ Writing_constants_to_RAM_3:
 
 RET
 	
+Wait_for_chip_ID:
+	ACALL		Wait_short
+			
+	CLR		PIN_CSN
+	ACALL	Wait_short
+	
+	MOV		A,		#0x4F	
+	ACALL	SPI0			
+	ACALL	SPI0
+	CJNE 	A,		#0,		Wait_for_chip_ID		
+		
+	SETB		PIN_CSN
+RET
