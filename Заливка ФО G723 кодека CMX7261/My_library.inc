@@ -34,6 +34,13 @@ poll_SPIF:
 	ACALL	Wait_short
 RET
 
+SPI01:
+	MOV		SPI0DAT,	A
+
+poll_SPIF1:
+	JNB		SPIF,		poll_SPIF	;Ждем, пока  SPI сообщит о том, что все данные переданы.
+	CLR		SPIF
+RET
 
 ;Выбор кристалла.
 ;Down_the_crystal_selection:
@@ -44,10 +51,9 @@ RET
 ;	SETB	PIN_CSN
 	;может быть, сюда нужно будет добавить задержку.
 
-
-Save_block_data_to_XRAM:
-;Для первого банка.
-	MOV		DPTR,	#0x0000		;Начало отсчета адресов XRAM.
+	
+Writing_constants_to_RAM_1:
+	MOV		DPTR,	#0x21		;Начало отсчета адресов XRAM.
 	MOV		A,		#0xFF
 	MOVX	@DPTR,	A			;Пересылка из аккумулятора в память.
 	INC		DPTR
@@ -79,8 +85,10 @@ Save_block_data_to_XRAM:
 	MOV		A,		#0x70
 	MOVX	@DPTR,	A			
 	INC		DPTR
-	
-;Для второго банка.
+RET
+
+Writing_constants_to_RAM_2:
+	MOV		DPTR,	#0x21
 	MOV		A,		#0x00		
 	MOVX	@DPTR,	A			
 	INC		DPTR
@@ -112,8 +120,10 @@ Save_block_data_to_XRAM:
 	MOV		A,		#0x10		
 	MOVX	@DPTR,	A			
 	INC		DPTR	
-	
-;Для третьего банка.
+RET
+
+Writing_constants_to_RAM_3:
+	MOV		DPTR,	#0x25
 	MOV		A,		#0x40		;Для регистров $25 и далее.		
 	MOVX	@DPTR,	A			
 	INC		DPTR
@@ -130,39 +140,4 @@ Save_block_data_to_XRAM:
 	MOVX	@DPTR,	A			
 
 RET
-	
-	
-Writing_constants_to_RAM:
-	CLR		PIN_CSN
-	ACALL	Wait_short
-	
-	MOV		R2,		#0x49
-	MOV		A,		R2
-	;INC		R2
-	;ACALL	SPI0
-	MOV		SPI0DAT,	A
-	;poll_SPIF1:
-	;	JNB		SPIF,		poll_SPIF1	;
-	;	CLR		SPIF
-	;ACALL	Wait_short
-	
-	MOV		DPTR,	#0x0004
-	MOVX	A,		@DPTR
-	;INC		DPTR
-	;ACALL	SPI0	
-	MOV		SPI0DAT,	A
-	poll_SPIF2:
-		JNB		SPIF,		poll_SPIF2	;
-		CLR		SPIF
-	;ACALL	Wait_short	
-	
-	SETB	PIN_CSN
-	ACALL	Wait_short
-	
-	;CJNE	R2,		#0x29,		Writing_constants_to_RAM
-RET
-	
-	
-	
-	
 	
