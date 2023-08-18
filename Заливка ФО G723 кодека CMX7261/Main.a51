@@ -134,7 +134,7 @@ CSEG AT 0
 	
 ;7. Если перед нами 3 блок, то сразу переходим к активации.
 	CJNE	R7,		#3,		Processing_of_basic_blocks
-	LJMP	Processing_of_the_activation_block
+	;LJMP	Processing_of_the_activation_block
 
 
 ;8. Передаем слова кодеку из основных блоков.
@@ -148,7 +148,7 @@ CSEG AT 0
 		MOV		A,		#0x4B
 		ACALL	SPI0
 		ACALL	SPI0
-		CJNE	A,		#0x00,		Wait_for_FIFO_emptying
+		CJNE	A,		#0,		Wait_for_FIFO_emptying
 		
 	MOV		R6,		#128			;Задаем начальное значение счетчику слов.
 	
@@ -157,7 +157,7 @@ CSEG AT 0
 	
 ;8.2. Передаем одно слово.
 	MOV		A,		#0x49
-	ACALL	SPI0
+	ACALL	SPI01
 
 	;Not_end_of_128_words_fragment:
 	Next_word:
@@ -186,7 +186,10 @@ CSEG AT 0
 	MOVX	A,		@R1
 	CJNE	A,		#0,		Register_28_is_not_0
 	
-	MOV		R1,		#0x28
+	MOV		A,		#0xFF
+	MOVX	@R1,	A
+	
+	MOV		R1,		#0x27
 	MOVX	A,		@R1
 	DEC		A
 	MOVX	@R1,	A
@@ -213,16 +216,16 @@ CSEG AT 0
 	SETB 	PIN_CSN
 	
 ;8.6. Считываем регистр $4F и ожидаем там увидеть цифру 2, т.е. пришло 2 контрольных слова.
-	Wait_for_2_control_words:
-		CLR		PIN_CSN
-		ACALL	Wait_short
+;	Wait_for_2_control_words:
+;		CLR		PIN_CSN
+;		ACALL	Wait_short
 	
-		MOV		A,		#0x4F	
-		ACALL	SPI0			
-		ACALL	SPI0			
+;		MOV		A,		#0x4F	
+;		ACALL	SPI0			
+;		ACALL	SPI0			
 	
-		SETB		PIN_CSN
-		CJNE	A,		#0x02,		Wait_for_2_control_words
+;		SETB		PIN_CSN
+;		CJNE	A,		#0x02,		Wait_for_2_control_words
 	
 ;8.7. Считываем из регистра $4D 4 байта контрольной суммы и сравниваем их с верными значениями из регистров $21-$24.
 		CLR		PIN_CSN
@@ -231,13 +234,13 @@ CSEG AT 0
 		MOV		A,		#0x4D	
 		ACALL	SPI0			
 		ACALL	SPI0
-			CJNE 	A,		#0xFF,		Error		
+			;CJNE 	A,		#0xFF,		Error		
 		ACALL	SPI0
-			CJNE 	A,		#0xFF,		Error
+			;CJNE 	A,		#0xFF,		Error
 		ACALL	SPI0
-			CJNE 	A,		#0xCE,		Error
+			;CJNE 	A,		#0xCE,		Error
 		ACALL	SPI0
-			CJNE 	A,		#0x46,		Error
+			;CJNE 	A,		#0x46,		Error
 		
 		SETB		PIN_CSN
 		INC		R7
@@ -256,46 +259,46 @@ CSEG AT 0
 			NOP
 			LJMP Loop
 	
-	Processing_of_the_activation_block:
-		Wait_for_chip_activation:
+;	Processing_of_the_activation_block:
+;		Wait_for_chip_activation:
 ;10. Проверяем, загружен ли FI.
-			CLR		PIN_CSN
-			ACALL	Wait_short
+;			CLR		PIN_CSN
+;			ACALL	Wait_short
 	
-			MOV		A,		#0x7E	
-			ACALL	SPI0			
-			ACALL	SPI0
-			CJNE 	A,		#01000000b,		Wait_for_chip_activation	
+;			MOV		A,		#0x7E	
+;			ACALL	SPI0			
+;			ACALL	SPI0
+;			CJNE 	A,		#01000000b,		Wait_for_chip_activation	
 		
-			SETB		PIN_CSN
+;			SETB		PIN_CSN
 		
-			ACALL		Wait_for_chip_ID
+;			ACALL		Wait_for_chip_ID
 		
 ;Считываем из $4D 2 байта и сравниваем их с ID.
-			CLR		PIN_CSN
-			ACALL	Wait_short
+;			CLR		PIN_CSN
+;			ACALL	Wait_short
 	
-			MOV		A,		#0x49	
-			ACALL	SPI0			
-			ACALL	SPI0
-			CJNE 	A,		#0x72,		Error		;Может быть, тут другой порядок байт.
-			ACALL	SPI0
-			CJNE 	A,		#0x61,		Error
+;			MOV		A,		#0x49	
+;			ACALL	SPI0			
+;			ACALL	SPI0
+;			CJNE 	A,		#0x72,		Error		;Может быть, тут другой порядок байт.
+;			ACALL	SPI0
+;			CJNE 	A,		#0x61,		Error
 			
-			SETB		PIN_CSN
-			ACALL		Wait_for_chip_ID
+;			SETB		PIN_CSN
+;			ACALL		Wait_for_chip_ID
 ;Считываем из $4D 2 байта и сравниваем их с версией.
-			CLR		PIN_CSN
-			ACALL	Wait_short
+;			CLR		PIN_CSN
+;			ACALL	Wait_short
 	
-			MOV		A,		#0x49	
-			ACALL	SPI0			
-			ACALL	SPI0
-			CJNE 	A,		#0x20,		Error		
-			ACALL	SPI0
-			CJNE 	A,		#0x00,		Error
+;			MOV		A,		#0x49	
+;			ACALL	SPI0			
+;			ACALL	SPI0
+;			CJNE 	A,		#0x20,		Error		
+;			ACALL	SPI0
+;			CJNE 	A,		#0x00,		Error
 			
-			SETB		PIN_CSN
+;			SETB		PIN_CSN
 			
 			;Loop:
 			;NOP
