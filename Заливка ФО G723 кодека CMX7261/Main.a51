@@ -64,7 +64,6 @@ CSEG AT 0
 	Read_6_bytes:
 		ACALL	SPI0			
 		DJNZ 	R2,		Read_6_bytes
-	MOV		R2,		#6
 		
 	SETB		PIN_CSN
 	
@@ -75,8 +74,8 @@ CSEG AT 0
 	
 	Start_of_N_block:
 		ACALL	Wait_short
-		MOV		R0,		DPH
-		MOV		R1,		DPL
+		;MOV		R0,		DPH
+		;MOV		R1,		DPL
 		
 		CJNE	R7,		#1,		Not_1st_block
 		ACALL	Writing_constants_to_RAM_1
@@ -88,24 +87,21 @@ CSEG AT 0
 				ACALL	Writing_constants_to_RAM_3
 				Not_3st_block:
 		
-		MOV		DPH,	R0
-		MOV		DPL,	R1
+		;MOV		DPH,	R0
+		;MOV		DPL,	R1
 		
 		
 ;5. В регистр кодека $49 нужно передать длину блока из регистров $27 и $28 МК.
-	MOV		R1,		#0x28
-	
 	CLR		PIN_CSN
 	ACALL	Wait_short
 	
 	MOV		A,		#0x49
 	ACALL	SPI01
 	
-	MOVX	A,		@R1
+	MOV		A,		0x27
 	ACALL	SPI01
 	
-	DEC		R1
-	MOVX	A,		@R1
+	MOV		A,		0x28
 	ACALL	SPI01
 	
 	SETB	PIN_CSN
@@ -113,19 +109,16 @@ CSEG AT 0
 
 
 ;6. В регистр кодека $49 нужно передать начальный адрес блока из регистров $25 и $26 МК.
-	MOV		R1,		#0x26
-	
 	CLR		PIN_CSN
 	ACALL	Wait_short
 	
 	MOV		A,		#0x49
 	ACALL	SPI01
 	
-	MOVX	A,		@R1
+	MOV		A,		0x25
 	ACALL	SPI01
-	
-	DEC		R1
-	MOVX	A,		@R1
+
+	MOV		A,		0x26
 	ACALL	SPI01
 	
 	SETB	PIN_CSN
@@ -134,7 +127,7 @@ CSEG AT 0
 	
 ;7. Если перед нами 3 блок, то сразу переходим к активации.
 	CJNE	R7,		#3,		Processing_of_basic_blocks
-	;LJMP	Processing_of_the_activation_block
+	LJMP	Processing_of_the_activation_block
 
 
 ;8. Передаем слова кодеку из основных блоков.
@@ -148,7 +141,11 @@ CSEG AT 0
 		MOV		A,		#0x4B
 		ACALL	SPI0
 		ACALL	SPI0
-		CJNE	A,		#0,		Wait_for_FIFO_emptying
+		
+		SETB	PIN_CSN			;Вот об этом я благополучно не подумала.
+		ACALL	Wait_short
+		
+		JNZ		Wait_for_FIFO_emptying
 		
 	MOV		R6,		#128			;Задаем начальное значение счетчику слов.
 	
@@ -159,10 +156,10 @@ CSEG AT 0
 	MOV		A,		#0x49
 	ACALL	SPI01
 
-	;Not_end_of_128_words_fragment:
 	Next_word:
 		MOV		R5,		#2
 		Next_byte_of_word:
+			CLR		A							;Оказалось, это не просто синтаксис.
 			MOVC	A,			@A+DPTR			;Перенесем из флэш-памяти в аккумулятор 1 байт с адресом DPTR.
 			ACALL	SPI01						;Передаем этот байт по SPI.
 			INC 	DPTR
@@ -182,68 +179,71 @@ CSEG AT 0
 	Not_end_of_the_bank:
 	
 ;8.4. Декремент длины блока в ручную, т.е. регистров $27 и $28.
-	MOV		R1,		#0x28
-	MOVX	A,		@R1
+	MOV		A,		0x28
 	CJNE	A,		#0,		Register_28_is_not_0
 	
-	MOV		A,		#0xFF
-	MOVX	@R1,	A
+	MOV		0x28,		#0xFF
 	
-	MOV		R1,		#0x27
-	MOVX	A,		@R1
+	MOV		A,		0x27
 	DEC		A
-	MOVX	@R1,	A
+	MOV		0x27,	A
 	LJMP	Next_step
 	
 	Register_28_is_not_0:
 		DEC		A
-		MOVX	@R1,	A
+		MOV		0x28,	A
 		LJMP	Next_step
 	
 	
 	Next_step:	
 ;8.5. Логическое "или" регистров $27 и $28.
-	MOV		R1,		#0x28
-	MOVX	A,		@R1
+	MOV		A,		0x28
 	MOV		R2,		A
 	
-	MOV		R1,		#0x27
-	MOVX	A,		@R1
+	MOV		A,		0x27
 	
 	ORL		A,		R2			;При этом результат заносится в аккумулятор.
-	CJNE	A,		#0,		Not_end_of_block
+	JNZ		Not_end_of_block
 	
 	SETB 	PIN_CSN
+	ACALL	Wait_short
 	
 ;8.6. Считываем регистр $4F и ожидаем там увидеть цифру 2, т.е. пришло 2 контрольных слова.
-;	Wait_for_2_control_words:
-;		CLR		PIN_CSN
-;		ACALL	Wait_short
+	Wait_for_2_control_words:
+		CLR		PIN_CSN
+		ACALL	Wait_short
 	
-;		MOV		A,		#0x4F	
-;		ACALL	SPI0			
-;		ACALL	SPI0			
+		MOV		A,		#0x4F	
+		ACALL	SPI0			
+		ACALL	SPI0			
 	
-;		SETB		PIN_CSN
-;		CJNE	A,		#0x02,		Wait_for_2_control_words
+		SETB		PIN_CSN
+		ACALL	Wait_short
+		
+		CJNE	A,		#0x02,		Wait_for_2_control_words
 	
 ;8.7. Считываем из регистра $4D 4 байта контрольной суммы и сравниваем их с верными значениями из регистров $21-$24.
 		CLR		PIN_CSN
 		ACALL	Wait_short
 	
 		MOV		A,		#0x4D	
-		ACALL	SPI0			
+		ACALL	SPI0	
+			MOV		B,		0x21
 		ACALL	SPI0
-			;CJNE 	A,		#0xFF,		Error		
+			CJNE 	A,		B,		Error	
+			MOV		B,		0x22
 		ACALL	SPI0
-			;CJNE 	A,		#0xFF,		Error
+			CJNE 	A,		B,		Error
+			MOV		B,		0x23
 		ACALL	SPI0
-			;CJNE 	A,		#0xCE,		Error
+			CJNE 	A,		B,		Error
+			MOV		B,		0x24
 		ACALL	SPI0
-			;CJNE 	A,		#0x46,		Error
+			CJNE 	A,		B,		Error
 		
 		SETB		PIN_CSN
 		INC		R7
+		LJMP	Start_of_N_block
 	
 	Not_end_of_block:
 		DJNZ 	R6,		Next_word 
@@ -254,55 +254,54 @@ CSEG AT 0
 	
 ;9. Решение на все случчаи жизни - перезагрузка.
 	Error:
-		;LJMP	Start_program
-			Loop:
-			NOP
-			LJMP Loop
+		LJMP	Start_program
 	
-;	Processing_of_the_activation_block:
-;		Wait_for_chip_activation:
+	Processing_of_the_activation_block:
+		Wait_for_chip_activation:
 ;10. Проверяем, загружен ли FI.
-;			CLR		PIN_CSN
-;			ACALL	Wait_short
+			CLR		PIN_CSN
+			ACALL	Wait_short
 	
-;			MOV		A,		#0x7E	
-;			ACALL	SPI0			
-;			ACALL	SPI0
-;			CJNE 	A,		#01000000b,		Wait_for_chip_activation	
+			MOV		A,		#0x7E	
+			ACALL	SPI0			
+			ACALL	SPI0
+			CJNE 	A,		#01000000b,		Wait_for_chip_activation	
 		
-;			SETB		PIN_CSN
-		
-;			ACALL		Wait_for_chip_ID
+			SETB		PIN_CSN
+			ACALL	Wait_short
+			
+			ACALL		Wait_for_chip_ID
 		
 ;Считываем из $4D 2 байта и сравниваем их с ID.
-;			CLR		PIN_CSN
-;			ACALL	Wait_short
+			CLR		PIN_CSN
+			ACALL	Wait_short
 	
-;			MOV		A,		#0x49	
-;			ACALL	SPI0			
-;			ACALL	SPI0
-;			CJNE 	A,		#0x72,		Error		;Может быть, тут другой порядок байт.
-;			ACALL	SPI0
-;			CJNE 	A,		#0x61,		Error
+			MOV		A,		#0x4D	
+			ACALL	SPI0			
+			ACALL	SPI0
+			CJNE 	A,		#0x72,		Error		;Может быть, тут другой порядок байт.
+			ACALL	SPI0
+			CJNE 	A,		#0x61,		Error
 			
-;			SETB		PIN_CSN
-;			ACALL		Wait_for_chip_ID
+			SETB		PIN_CSN
+			ACALL	Wait_short
+			
+			ACALL		Wait_for_chip_ID
 ;Считываем из $4D 2 байта и сравниваем их с версией.
-;			CLR		PIN_CSN
-;			ACALL	Wait_short
+			CLR		PIN_CSN
+			ACALL	Wait_short
 	
-;			MOV		A,		#0x49	
-;			ACALL	SPI0			
-;			ACALL	SPI0
-;			CJNE 	A,		#0x20,		Error		
-;			ACALL	SPI0
-;			CJNE 	A,		#0x00,		Error
+			MOV		A,		#0x4D	
+			ACALL	SPI0			
+			ACALL	SPI0
+			CJNE 	A,		#0x20,		Error		
+			ACALL	SPI0
+			CJNE 	A,		#0x00,		Error
 			
-;			SETB		PIN_CSN
+			SETB		PIN_CSN
+			ACALL	Wait_short
 			
-			;Loop:
-			;NOP
-			;LJMP Loop
+
 $include (My_library.inc)
 	
 END

@@ -7,9 +7,9 @@ PIN_RESETN		EQU		P2.1
 	
 ;Задержки для SPI.
 Wait_short:
+	MOV		R0,			#100
 	Wait_sh:
 		DJNZ	R0,			Wait_sh
-	MOV		R0,			#100
 RET
 
 Wait_long:
@@ -43,92 +43,32 @@ poll_SPIF1:
 RET
 	
 Writing_constants_to_RAM_1:
-	MOV		DPTR,	#0x21		;Начало отсчета адресов XRAM.
-	MOV		A,		#0xFF
-	MOVX	@DPTR,	A			;Пересылка из аккумулятора в память.
-	INC		DPTR
-	
-	MOV		A,		#0xFF	
-	MOVX	@DPTR,	A			
-	INC		DPTR
-	
-	MOV		A,		#0xCE	
-	MOVX	@DPTR,	A			
-	INC		DPTR
-
-	MOV		A,		#0x46		
-	MOVX	@DPTR,	A			
-	INC		DPTR
-	
-	MOV		A,		#0x40		
-	MOVX	@DPTR,	A			
-	INC		DPTR
-	
-	MOV		A,		#0x00		
-	MOVX	@DPTR,	A			
-	INC		DPTR
-	
-	MOV		A,		#0xA2		
-	MOVX	@DPTR,	A			
-	INC		DPTR
-	
-	MOV		A,		#0x70
-	MOVX	@DPTR,	A			
-	INC		DPTR
+	MOV		0x21,	#0xFF
+	MOV		0x22,	#0xFF
+	MOV		0x23,	#0xCE
+	MOV		0x24,	#0x46
+	MOV		0x25,	#0x40
+	MOV		0x26,	#0x00
+	MOV		0x27,	#0xA2
+	MOV		0x28,	#0x70
 RET
 
 Writing_constants_to_RAM_2:
-	MOV		DPTR,	#0x21
-	MOV		A,		#0x00		
-	MOVX	@DPTR,	A			
-	INC		DPTR
-	
-	MOV		A,		#0x10		
-	MOVX	@DPTR,	A			
-	INC		DPTR
-	
-	MOV		A,		#0x22		
-	MOVX	@DPTR,	A			
-	INC		DPTR
-
-	MOV		A,		#0xF6		
-	MOVX	@DPTR,	A			
-	INC		DPTR
-	
-	MOV		A,		#0x20		
-	MOVX	@DPTR,	A			
-	INC		DPTR
-	
-	MOV		A,		#0x00		
-	MOVX	@DPTR,	A			
-	INC		DPTR
-	
-	MOV		A,		#0x18	
-	MOVX	@DPTR,	A			
-	INC		DPTR
-	
-	MOV		A,		#0x10		
-	MOVX	@DPTR,	A			
-	INC		DPTR	
+	MOV		0x21,	#0x00
+	MOV		0x22,	#0x10
+	MOV		0x23,	#0x22
+	MOV		0x24,	#0xF6
+	MOV		0x25,	#0x20
+	MOV		0x26,	#0x00
+	MOV		0x27,	#0x18
+	MOV		0x28,	#0x10
 RET
-
+	
 Writing_constants_to_RAM_3:
-	MOV		DPTR,	#0x25
-	MOV		A,		#0x40		;Для регистров $25 и далее.		
-	MOVX	@DPTR,	A			
-	INC		DPTR
-	
-	MOV		A,		#0x10		
-	MOVX	@DPTR,	A			
-	INC		DPTR
-	
-	MOV		A,		#0x00	
-	MOVX	@DPTR,	A			
-	INC		DPTR
-
-	MOV		A,		#0x00	
-	MOVX	@DPTR,	A			
-
+	MOV		0x25,	#0x40		;Для регистров $25 и далее.
+	MOV		0x26,	#0x10
+	MOV		0x27,	#0x00
+	MOV		0x28,	#0x00
 RET
 	
 Wait_for_chip_ID:
@@ -140,7 +80,9 @@ Wait_for_chip_ID:
 	MOV		A,		#0x4F	
 	ACALL	SPI0			
 	ACALL	SPI0
-	CJNE 	A,		#0,		Wait_for_chip_ID		
-		
+
 	SETB		PIN_CSN
+	ACALL		Wait_short
+	
+	JZ 		Wait_for_chip_ID		;Вот эта штука должна быть строго после поъема выбора кристалла!
 RET

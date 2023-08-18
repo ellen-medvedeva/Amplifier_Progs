@@ -140,7 +140,23 @@
         <Bp>
           <Number>0</Number>
           <Type>0</Type>
-          <LineNumber>213</LineNumber>
+          <LineNumber>233</LineNumber>
+          <EnabledFlag>1</EnabledFlag>
+          <Address>-16776945</Address>
+          <ByteObject>0</ByteObject>
+          <HtxType>0</HtxType>
+          <ManyObjects>0</ManyObjects>
+          <SizeOfObject>0</SizeOfObject>
+          <BreakByAccess>0</BreakByAccess>
+          <BreakIfRCount>1</BreakIfRCount>
+          <Filename>C:\Users\Lenovo\Desktop\amplifier\Progs\Заливка ФО G723 кодека CMX7261\Main.a51</Filename>
+          <ExecCommand></ExecCommand>
+          <Expression></Expression>
+        </Bp>
+        <Bp>
+          <Number>1</Number>
+          <Type>0</Type>
+          <LineNumber>215</LineNumber>
           <EnabledFlag>1</EnabledFlag>
           <Address>-16776966</Address>
           <ByteObject>0</ByteObject>
@@ -149,9 +165,25 @@
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
           <BreakIfRCount>1</BreakIfRCount>
-          <Filename>Main.a51</Filename>
+          <Filename>C:\Users\Lenovo\Desktop\amplifier\Progs\Заливка ФО G723 кодека CMX7261\Main.a51</Filename>
           <ExecCommand></ExecCommand>
           <Expression></Expression>
+        </Bp>
+        <Bp>
+          <Number>2</Number>
+          <Type>0</Type>
+          <LineNumber>227</LineNumber>
+          <EnabledFlag>1</EnabledFlag>
+          <Address>-16776952</Address>
+          <ByteObject>0</ByteObject>
+          <HtxType>0</HtxType>
+          <ManyObjects>0</ManyObjects>
+          <SizeOfObject>0</SizeOfObject>
+          <BreakByAccess>0</BreakByAccess>
+          <BreakIfRCount>1</BreakIfRCount>
+          <Filename>C:\Users\Lenovo\Desktop\amplifier\Progs\Заливка ФО G723 кодека CMX7261\Main.a51</Filename>
+          <ExecCommand></ExecCommand>
+          <Expression>\\Codec_FI_pouring\MAIN\227</Expression>
         </Bp>
       </Breakpoint>
       <MemoryWindow1>
